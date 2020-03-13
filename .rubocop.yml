@@ -1,0 +1,39 @@
+require: rubocop-rspec
+
+AllCops:
+  DisplayCopNames: true
+  Include:
+    - '**/*.rb'
+    - '**/Rakefile'
+    - '**/Gemfile'
+    - '**/config.ru'
+    - '**/*.gemspec'
+  Exclude:
+    - 'bin/**/*'
+    - 'dummy/bin/**/*'
+    - '.gems/**/*'
+    - 'vendor/**/*'
+    - 'dummy/db/schema.rb'
+    - 'bin/*'
+    - 'dummy/bin/*'
+    - 'dummy/node_modules/**/*'
+Rails:
+  Enabled: true
+Documentation:
+  Enabled: false
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*.rb'
+    - 'dummy/spec/**/*.rb'
+Layout/ParameterAlignment:
+  EnforcedStyle: with_fixed_indentation
+Layout/FirstArgumentIndentation:
+  EnforcedStyle: consistent
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
