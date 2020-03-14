@@ -1,20 +1,29 @@
 # frozen_string_literal: true
 
 module Croods
-  class Resource
-    def initialize
-      puts model_class
-      Object.const_set(model_class, Class.new(Record))
-    end
+  module Resource
+    extend ActiveSupport::Concern
 
-    private
+    class_methods do
+      def namespace
+        to_s.split('::').first
+      end
 
-    def model_class
-      ActiveSupport::Inflector.singularize(namespace)
-    end
+      def resource_name
+        namespace.downcase
+      end
 
-    def namespace
-      self.class.to_s.split('::').first
+      def model_name
+        namespace.singularize
+      end
+
+      def create_model!
+        Object.const_set(model_name, Class.new(Model))
+      end
+
+      def create_controller!
+        Object.const_set("#{namespace}Controller", Class.new(Controller))
+      end
     end
   end
 end
