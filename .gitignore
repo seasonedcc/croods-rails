@@ -1,5 +1,5 @@
 .bundle/
 log/*.log
 pkg/
-dummy/log/*.log
-dummy/tmp/
+todos/log/*.log
+todos/tmp/

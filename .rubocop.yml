@@ -10,13 +10,13 @@ AllCops:
     - '**/*.gemspec'
   Exclude:
     - 'bin/**/*'
-    - 'dummy/bin/**/*'
+    - 'todos/bin/**/*'
     - '.gems/**/*'
     - 'vendor/**/*'
-    - 'dummy/db/schema.rb'
+    - 'todos/db/schema.rb'
     - 'bin/*'
-    - 'dummy/bin/*'
-    - 'dummy/node_modules/**/*'
+    - 'todos/bin/*'
+    - 'todos/node_modules/**/*'
 Rails:
   Enabled: true
 Documentation:
@@ -24,7 +24,7 @@ Documentation:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'
-    - 'dummy/spec/**/*.rb'
+    - 'todos/spec/**/*.rb'
 Layout/ParameterAlignment:
   EnforcedStyle: with_fixed_indentation
 Layout/FirstArgumentIndentation:
