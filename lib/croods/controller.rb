@@ -1,38 +1,16 @@
 # frozen_string_literal: true
 
+require_relative 'controller/actions'
+require_relative 'controller/not_found'
+require_relative 'controller/already_taken'
+
 module Croods
   class Controller < ActionController::API
-    rescue_from ActiveRecord::RecordNotFound, with: :not_found
-
-    def index
-      render json: model.order(:created_at)
-    end
-
-    def show
-      render json: record
-    end
-
-    def create
-      render status: :created, json: model.create!(record_params)
-    end
-
-    def update
-      record.update!(record_params)
-      render json: record
-    end
-
-    def destroy
-      render json: record.destroy!
-    end
+    include Actions
+    include NotFound
+    include AlreadyTaken
 
     protected
-
-    def not_found(exception)
-      render status: :not_found, json: {
-        id: 'not_found',
-        message: exception.message
-      }
-    end
 
     def record
       model.find(params[:id])

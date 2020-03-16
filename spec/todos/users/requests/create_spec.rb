@@ -7,10 +7,29 @@ describe 'POST /users', type: :request do
 
   let(:params) { { email: 'foo@bar.com', name: 'Foo Bar' } }
 
-  before do
-    post '/users', params: params.to_json
+  context 'with valid params' do
+    before do
+      post '/users', params: params.to_json
+    end
+
+    it { is_expected.to have_http_status(:created) }
+    it { expect(response.body).to eq_json(User.first) }
   end
 
-  it { is_expected.to have_http_status(:created) }
-  it { expect(response.body).to eq_json(User.first) }
+  context 'with email already taken' do
+    let(:error) do
+      {
+        id: 'already_taken',
+        message: 'Email already taken'
+      }
+    end
+
+    before do
+      User.create! email: 'foo@bar.com', name: 'Foo Bar'
+      post '/users', params: params.to_json
+    end
+
+    it { is_expected.to have_http_status(:unprocessable_entity) }
+    it { expect(response.body).to eq_json(error) }
+  end
 end
