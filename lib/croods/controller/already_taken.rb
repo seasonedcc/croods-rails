@@ -13,7 +13,7 @@ module Croods
 
       def already_taken(exception)
         match = exception.message.match(/\((.+)\)=\(.+\) already exists/)
-        attribute = match && match[1].capitalize
+        attribute = match && model.human_attribute_name(match[1])
 
         message = attribute ? "#{attribute} already taken" : 'Already taken'
 

@@ -20,7 +20,7 @@ describe 'PUT /users/:id', type: :request do
     let(:error) do
       {
         id: 'already_taken',
-        message: 'Email already taken'
+        message: 'E-mail already taken'
       }
     end
 
