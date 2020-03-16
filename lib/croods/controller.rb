@@ -2,6 +2,8 @@
 
 module Croods
   class Controller < ActionController::API
+    rescue_from ActiveRecord::RecordNotFound, with: :not_found
+
     def index
       render json: model.order(:created_at)
     end
@@ -23,7 +25,14 @@ module Croods
       render json: record.destroy!
     end
 
-    private
+    protected
+
+    def not_found(exception)
+      render status: :not_found, json: {
+        id: 'not_found',
+        message: exception.message
+      }
+    end
 
     def record
       model.find(params[:id])
