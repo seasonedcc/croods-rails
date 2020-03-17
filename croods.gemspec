@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
     '{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md'
   ]
 
+  spec.add_dependency 'committee', '3.3.0'
   spec.add_dependency 'rails', '~> 6.0.2', '>= 6.0.2.1'
 
   spec.add_development_dependency 'pg'

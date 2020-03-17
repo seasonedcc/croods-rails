@@ -1,0 +1,60 @@
+{
+  "$schema": "http://interagent.github.io/interagent-hyper-schema",
+  "type": [
+    "object"
+  ],
+  "definitions": {
+    "error": {
+      "$schema": "http://json-schema.org/draft-04/hyper-schema",
+      "title": "Error",
+      "description": "An error represents a failed action in the API",
+      "stability": "prototype",
+      "strictProperties": true,
+      "type": [
+        "object"
+      ],
+      "definitions": {
+        "id": {
+          "description": "unique identifier of error",
+          "readOnly": true,
+          "pattern": "^\\w+$",
+          "type": [
+            "string"
+          ]
+        },
+        "message": {
+          "description": "message of error",
+          "readOnly": true,
+          "type": [
+            "string"
+          ]
+        },
+        "identity": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/error/definitions/id"
+            }
+          ]
+        }
+      },
+      "links": [],
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/error/definitions/id"
+        },
+        "message": {
+          "$ref": "#/definitions/error/definitions/message"
+        }
+      }
+    }
+  },
+  "properties": {
+    "error": {
+      "$ref": "#/definitions/error"
+    }
+  },
+  "description": "API",
+  "id": "api",
+  "links": [],
+  "title": "API"
+}
