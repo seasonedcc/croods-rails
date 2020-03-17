@@ -17,4 +17,10 @@ module Croods
     Croods.namespaces = namespaces.map(&:to_s).freeze
     Middleware.insert!
   end
+
+  def self.resources
+    Croods.namespaces.map do |namespace|
+      "#{namespace.camelcase(:upper)}::Resource".constantize
+    end
+  end
 end

@@ -4,11 +4,10 @@ module ActionDispatch
   module Routing
     class Mapper
       def mount_croods
-        Croods.namespaces.each do |namespace|
-          resource = "#{namespace.camelcase(:upper)}::Resource".constantize
+        Croods.resources.each do |resource|
           resource.create_model!
           resource.create_controller!
-          resources resource.resource_name
+          resources resource.route_name
         end
 
         Croods.json_schema = Croods::CreateJsonSchema.execute
