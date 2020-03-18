@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+require_relative 'json_schema/definitions'
+require_relative 'json_schema/properties'
+require_relative 'json_schema/required'
+require_relative 'json_schema/links'
+
 module Croods
   module Resource
     module JsonSchema
@@ -10,73 +15,17 @@ module Croods
 
         path = File.expand_path('../initial_schemas/resource.json', __dir__)
         @json_schema = JSON.parse(File.read(path))
-        @json_schema['title'] = model.model_name.human
-        @json_schema['definitions'] = definitions
-        @json_schema['properties'] = properties
-        @json_schema['required'] = required
+        @json_schema['definitions'] = Definitions.schema(self)
+        @json_schema['properties'] = Properties.schema(self)
+        @json_schema['required'] = Required.schema(self)
+        @json_schema['links'] = Links.schema(self)
         @json_schema
       end
 
-      def definitions
-        attribute_definitions.merge(identity: identity)
-      end
-
-      def properties
-        attributes = {}
-
-        model.columns_hash.each_value do |attribute|
-          attributes[attribute.name] = ref(attribute.name)
-        end
-
-        attributes
-      end
-
-      def required
-        required = []
-
-        model.columns_hash.each_value do |attribute|
-          required << attribute.name unless attribute.null
-        end
-
-        required
-      end
-
-      def attribute_definitions
-        attributes = {}
-
-        model.columns_hash.each_value do |attribute|
-          attributes[attribute.name] = {
-            type: attribute_types(attribute)
-          }.merge(attribute_format(attribute))
-        end
-
-        attributes
-      end
-
-      def attribute_format(attribute)
-        return {} unless attribute.type == :datetime
-
-        { format: 'date-time' }
-      end
-
-      def attribute_types(attribute)
-        types = []
-        types << attribute_type(attribute.type)
-        types << 'null' if attribute.null
-        types
-      end
-
-      def attribute_type(type)
-        TYPES[type] || type.to_s
-      end
-
-      def identity
-        ref(:id)
-      end
-
-      def ref(attribute)
+      def ref(attribute = nil)
         {
-          '$ref': "#/definitions/#{resource_name}/definitions/#{attribute}"
+          '$ref': "#/definitions/#{resource_name}" +
+            (attribute ? "/definitions/#{attribute}" : '')
         }
       end
     end

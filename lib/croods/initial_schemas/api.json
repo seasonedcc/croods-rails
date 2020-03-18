@@ -6,8 +6,6 @@
   "definitions": {
     "error": {
       "$schema": "http://json-schema.org/draft-04/hyper-schema",
-      "title": "Error",
-      "description": "An error represents a failed action in the API",
       "stability": "prototype",
       "strictProperties": true,
       "type": [
@@ -15,7 +13,6 @@
       ],
       "definitions": {
         "id": {
-          "description": "unique identifier of error",
           "readOnly": true,
           "pattern": "^\\w+$",
           "type": [
@@ -23,7 +20,6 @@
           ]
         },
         "message": {
-          "description": "message of error",
           "readOnly": true,
           "type": [
             "string"
@@ -52,9 +48,5 @@
     "error": {
       "$ref": "#/definitions/error"
     }
-  },
-  "description": "API",
-  "id": "api",
-  "links": [],
-  "title": "API"
+  }
 }

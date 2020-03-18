@@ -22,8 +22,7 @@ module Croods
         }
       end
 
-      puts schema.deep_stringify_keys!
-
+      schema.deep_stringify_keys!
       Committee::Drivers::HyperSchema::Driver.new.parse(schema)
     end
   end
