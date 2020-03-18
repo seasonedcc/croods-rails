@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'links/index'
-
 module Croods
   module Resource
     module JsonSchema
