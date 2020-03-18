@@ -8,8 +8,6 @@ require_relative 'json_schema/links'
 module Croods
   module Resource
     module JsonSchema
-      TYPES = { datetime: 'string', text: 'string' }.freeze
-
       def json_schema
         return @json_schema if @json_schema
 
