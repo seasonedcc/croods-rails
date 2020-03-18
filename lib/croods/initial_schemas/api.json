@@ -1,0 +1,52 @@
+{
+  "$schema": "http://interagent.github.io/interagent-hyper-schema",
+  "type": [
+    "object"
+  ],
+  "definitions": {
+    "error": {
+      "$schema": "http://json-schema.org/draft-04/hyper-schema",
+      "stability": "prototype",
+      "strictProperties": true,
+      "type": [
+        "object"
+      ],
+      "definitions": {
+        "id": {
+          "readOnly": true,
+          "pattern": "^\\w+$",
+          "type": [
+            "string"
+          ]
+        },
+        "message": {
+          "readOnly": true,
+          "type": [
+            "string"
+          ]
+        },
+        "identity": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/error/definitions/id"
+            }
+          ]
+        }
+      },
+      "links": [],
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/error/definitions/id"
+        },
+        "message": {
+          "$ref": "#/definitions/error/definitions/message"
+        }
+      }
+    }
+  },
+  "properties": {
+    "error": {
+      "$ref": "#/definitions/error"
+    }
+  }
+}

@@ -7,10 +7,30 @@ describe 'GET /users', type: :request do
 
   let!(:user) { User.create! email: 'foo@bar.com', name: 'Foo Bar' }
 
-  before do
-    get '/users'
+  context 'with valid request' do
+    before do
+      get '/users'
+    end
+
+    it { is_expected.to have_http_status(:ok) }
+    it { expect(response.body).to eq_json([user]) }
   end
 
-  it { is_expected.to have_http_status(:ok) }
-  it { expect(response.body).to eq_json([user]) }
+  context 'with invalid request' do
+    let(:error) do
+      {
+        id: 'bad_request',
+        message: "Invalid request.\n\n#: failed schema " \
+          '#/definitions/user/links/0/schema: "{"foo":"bar"}" is not a ' \
+          'permitted key.'
+      }
+    end
+
+    before do
+      get '/users', params: { foo: 'bar' }.to_json
+    end
+
+    it { is_expected.to have_http_status(:bad_request) }
+    it { expect(response.body).to eq_json(error) }
+  end
 end
