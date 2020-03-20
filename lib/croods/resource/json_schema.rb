@@ -11,7 +11,7 @@ module Croods
       def json_schema
         return @json_schema if @json_schema
 
-        path = File.expand_path('../initial_schemas/resource.json', __dir__)
+        path = File.expand_path('json_schema/initial_schema.json', __dir__)
         @json_schema = JSON.parse(File.read(path))
         @json_schema['definitions'] = Definitions.schema(self)
         @json_schema['properties'] = Properties.schema(self)

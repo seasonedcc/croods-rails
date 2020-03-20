@@ -10,7 +10,7 @@ module ActionDispatch
           resources resource.route_name
         end
 
-        Croods.json_schema = Croods::CreateJsonSchema.execute
+        Croods.json_schema = Croods::Api.json_schema
       end
     end
   end

@@ -8,7 +8,7 @@ require 'croods/controller'
 require 'croods/resource'
 require 'croods/routes'
 require 'croods/middleware'
-require 'croods/create_json_schema'
+require 'croods/api'
 
 module Croods
   cattr_accessor :namespaces, :json_schema
