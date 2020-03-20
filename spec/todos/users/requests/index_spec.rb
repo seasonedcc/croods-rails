@@ -21,13 +21,13 @@ describe 'GET /users', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/user/links/0/schema: "{"foo":"bar"}" is not a ' \
+          '#/definitions/user/links/0/schema: "foo" is not a ' \
           'permitted key.'
       }
     end
 
     before do
-      get '/users', params: { foo: 'bar' }.to_json
+      get '/users?foo=bar'
     end
 
     it { is_expected.to have_http_status(:bad_request) }
