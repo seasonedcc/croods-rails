@@ -8,7 +8,7 @@ module Croods
           class << self
             def link(resource)
               {
-                href: "/#{resource.route_name}",
+                href: resource.collection_path,
                 method: 'POST',
                 rel: 'new',
                 schema: schema(resource),

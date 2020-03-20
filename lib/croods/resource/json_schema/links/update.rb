@@ -8,8 +8,7 @@ module Croods
           class << self
             def link(resource)
               {
-                href: "/#{resource.route_name}/{(%23%2Fdefinitions" \
-                  "%2F#{resource.resource_name}%2Fdefinitions%2Fid)}",
+                href: resource.member_path,
                 method: 'PUT',
                 rel: 'self',
                 schema: schema(resource),
