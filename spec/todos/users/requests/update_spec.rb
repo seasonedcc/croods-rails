@@ -16,6 +16,97 @@ describe 'PUT /users/:id', type: :request do
     it { expect(response.body).to eq_json(user.reload) }
   end
 
+  context 'with invalid param' do
+    let(:params) { { email: 'foo@bar.com', name: 'Foo Bar', foo: 'bar' } }
+
+    let(:error) do
+      {
+        id: 'bad_request',
+        message: "Invalid request.\n\n#: failed schema " \
+          '#/definitions/user/links/2/schema: "foo" is not a permitted key.'
+      }
+    end
+
+    before do
+      put "/users/#{user.id}", params: params.to_json
+    end
+
+    it { is_expected.to have_http_status(:bad_request) }
+    it { expect(response.body).to eq_json(error) }
+  end
+
+  context 'with id param' do
+    let(:params) { { email: 'foo@bar.com', name: 'Foo Bar', id: 123 } }
+
+    let(:error) do
+      {
+        id: 'bad_request',
+        message: "Invalid request.\n\n#: failed schema " \
+          '#/definitions/user/links/2/schema: "id" is not a ' \
+          'permitted key.'
+      }
+    end
+
+    before do
+      put "/users/#{user.id}", params: params.to_json
+    end
+
+    it { is_expected.to have_http_status(:bad_request) }
+    it { expect(response.body).to eq_json(error) }
+  end
+
+  context 'with created_at param' do
+    let(:params) do
+      {
+        email: 'foo@bar.com',
+        name: 'Foo Bar',
+        created_at: '2018-11-13T20:20:39+00:00'
+      }
+    end
+
+    let(:error) do
+      {
+        id: 'bad_request',
+        message: "Invalid request.\n\n#: failed schema " \
+          '#/definitions/user/links/2/schema: "created_at" is not a ' \
+          'permitted key.'
+      }
+    end
+
+    before do
+      put "/users/#{user.id}", params: params.to_json
+    end
+
+    it { is_expected.to have_http_status(:bad_request) }
+    it { expect(response.body).to eq_json(error) }
+  end
+
+  context 'with updated_at param' do
+    let(:params) do
+      {
+        email: 'foo@bar.com',
+        name: 'Foo Bar',
+        updated_at: '2018-11-13T20:20:39+00:00'
+      }
+    end
+
+    let(:error) do
+      {
+        id: 'bad_request',
+        message: "Invalid request.\n\n#: failed schema " \
+          '#/definitions/user/links/2/schema: "updated_at" is not a ' \
+          'permitted key.'
+      }
+    end
+
+    before do
+      put "/users/#{user.id}", params: params.to_json
+    end
+
+    it { is_expected.to have_http_status(:bad_request) }
+    it { expect(response.body).to eq_json(error) }
+  end
+
   context 'with email already taken' do
     let(:error) do
       {
