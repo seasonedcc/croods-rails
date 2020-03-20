@@ -21,10 +21,11 @@ Gem::Specification.new do |spec|
   ]
 
   spec.add_dependency 'committee', '3.3.0'
-  spec.add_dependency 'rails', '~> 6.0.2', '>= 6.0.2.1'
+  spec.add_dependency 'rails', '~> 6.0.2', '>= 6.0.2.2'
 
   spec.add_development_dependency 'pg'
   spec.add_development_dependency 'rspec-rails', '~> 4.0.0.rc1'
   spec.add_development_dependency 'rubocop', '0.80.1'
   spec.add_development_dependency 'rubocop-rspec', '1.38.1'
+  spec.add_development_dependency 'simplecov', '~> 0.17.0'
 end
