@@ -20,7 +20,7 @@ module Croods
           def ignore?(options, attribute)
             return unless options[:write]
 
-            %w[created_at updated_at].include?(attribute.name)
+            %w[id created_at updated_at].include?(attribute.name)
           end
         end
       end
