@@ -4,14 +4,26 @@ module Croods
   module Resource
     module JsonSchema
       module Required
-        def self.schema(resource)
-          required = []
+        class << self
+          def schema(resource, **options)
+            required = []
 
-          resource.model.columns_hash.each_value do |attribute|
-            required << attribute.name unless attribute.null
+            resource.model.columns_hash.each_value do |attribute|
+              next if ignore?(options, attribute)
+
+              required << attribute.name unless attribute.null
+            end
+
+            required
           end
 
-          required
+          def ignore?(options, attribute)
+            return unless options[:write]
+
+            return true if attribute.default || attribute.default_function
+
+            %w[created_at updated_at].include?(attribute.name)
+          end
         end
       end
     end

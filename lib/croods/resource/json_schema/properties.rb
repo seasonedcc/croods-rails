@@ -4,14 +4,24 @@ module Croods
   module Resource
     module JsonSchema
       module Properties
-        def self.schema(resource)
-          attributes = {}
+        class << self
+          def schema(resource, **options)
+            attributes = {}
 
-          resource.model.columns_hash.each_value do |attribute|
-            attributes[attribute.name] = resource.ref(attribute.name)
+            resource.model.columns_hash.each_value do |attribute|
+              next if ignore?(options, attribute)
+
+              attributes[attribute.name] = resource.ref(attribute.name)
+            end
+
+            attributes
           end
 
-          attributes
+          def ignore?(options, attribute)
+            return unless options[:write]
+
+            %w[created_at updated_at].include?(attribute.name)
+          end
         end
       end
     end
