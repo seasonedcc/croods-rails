@@ -5,7 +5,10 @@ require 'rails_helper'
 describe 'GET /users/:id', type: :request do
   subject { response }
 
-  let(:user) { User.create! email: 'foo@bar.com', name: 'Foo Bar' }
+  let(:user) do
+    User.create! email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar'
+  end
+
   let(:id) { user.id }
 
   context 'with valid request' do

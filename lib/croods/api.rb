@@ -8,6 +8,8 @@ module Croods
         schema = JSON.parse(json)
 
         Croods.resources.each do |resource|
+          next unless resource.table_exists?
+
           name = resource.resource_name
           schema['definitions'][name] = resource.json_schema
           schema['properties'][name] = resource.ref

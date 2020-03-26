@@ -3,12 +3,14 @@
 require_relative 'controller/actions'
 require_relative 'controller/not_found'
 require_relative 'controller/already_taken'
+require_relative 'controller/record_invalid'
 
 module Croods
   class Controller < ActionController::API
     include Actions
     include NotFound
     include AlreadyTaken
+    include RecordInvalid
 
     protected
 
@@ -17,11 +19,19 @@ module Croods
     end
 
     def record_params
-      params.require(model_name.downcase).permit!
+      params.permit(resource.params.keys)
+    end
+
+    def resource_name
+      self.class.to_s.titleize.split.first
+    end
+
+    def resource
+      "#{resource_name}::Resource".constantize
     end
 
     def model_name
-      self.class.to_s.titleize.split.first.singularize
+      resource_name.singularize
     end
 
     def model

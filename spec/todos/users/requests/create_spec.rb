@@ -5,7 +5,7 @@ require 'rails_helper'
 describe 'POST /users', type: :request do
   subject { response }
 
-  let(:params) { { email: 'foo@bar.com', name: 'Foo Bar' } }
+  let(:params) { { email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar' } }
 
   context 'with valid params' do
     before do
@@ -13,11 +13,13 @@ describe 'POST /users', type: :request do
     end
 
     it { is_expected.to have_http_status(:created) }
-    it { expect(response.body).to eq_json(User.first) }
+    it { expect(response.body).to eq_json(User.first.to_json) }
   end
 
   context 'with invalid param' do
-    let(:params) { { email: 'foo@bar.com', name: 'Foo Bar', foo: 'bar' } }
+    let(:params) do
+      { email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar', foo: 'bar' }
+    end
 
     let(:error) do
       {
@@ -36,7 +38,9 @@ describe 'POST /users', type: :request do
   end
 
   context 'with id param' do
-    let(:params) { { email: 'foo@bar.com', name: 'Foo Bar', id: 123 } }
+    let(:params) do
+      { email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar', id: 123 }
+    end
 
     let(:error) do
       {
@@ -60,6 +64,7 @@ describe 'POST /users', type: :request do
       {
         email: 'foo@bar.com',
         name: 'Foo Bar',
+        password: 'foobar',
         created_at: '2018-11-13T20:20:39+00:00'
       }
     end
@@ -86,6 +91,7 @@ describe 'POST /users', type: :request do
       {
         email: 'foo@bar.com',
         name: 'Foo Bar',
+        password: 'foobar',
         updated_at: '2018-11-13T20:20:39+00:00'
       }
     end
@@ -108,7 +114,7 @@ describe 'POST /users', type: :request do
   end
 
   context 'without all required params' do
-    let(:params) { { email: 'foo@bar.com' } }
+    let(:params) { { email: 'foo@bar.com', password: 'foobar' } }
 
     let(:error) do
       {
@@ -129,13 +135,13 @@ describe 'POST /users', type: :request do
   context 'with email already taken' do
     let(:error) do
       {
-        id: 'already_taken',
-        message: 'E-mail already taken'
+        id: 'record_invalid',
+        message: 'Validation failed: E-mail has already been taken'
       }
     end
 
     before do
-      User.create! email: 'foo@bar.com', name: 'Foo Bar'
+      User.create! email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar'
       post '/users', params: params.to_json
     end
 

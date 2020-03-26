@@ -5,7 +5,9 @@ require 'rails_helper'
 describe 'PUT /users/:id', type: :request do
   subject { response }
 
-  let(:user) { User.create! email: 'foo@bar.com', name: 'Foo Bar' }
+  let(:user) do
+    User.create! email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar'
+  end
 
   context 'with valid params' do
     before do
@@ -116,7 +118,7 @@ describe 'PUT /users/:id', type: :request do
     end
 
     before do
-      User.create! email: 'bar@foo.com', name: 'Bar Foo'
+      User.create! email: 'bar@foo.com', name: 'Bar Foo', password: 'barfoo'
       put "/users/#{user.id}", params: { email: 'bar@foo.com' }.to_json
     end
 

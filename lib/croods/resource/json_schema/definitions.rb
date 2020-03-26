@@ -4,7 +4,7 @@ module Croods
   module Resource
     module JsonSchema
       module Definitions
-        TYPES = { datetime: 'string', text: 'string' }.freeze
+        TYPES = { datetime: 'string', text: 'string', json: 'object' }.freeze
 
         class << self
           def schema(resource)
@@ -14,7 +14,7 @@ module Croods
           def attributes(resource)
             attributes = {}
 
-            resource.model.columns_hash.each_value do |attribute|
+            resource.params.each_value do |attribute|
               attributes[attribute.name] = {
                 type: types(attribute)
               }.merge(format(attribute))

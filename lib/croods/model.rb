@@ -3,5 +3,23 @@
 module Croods
   class Model < ActiveRecord::Base
     self.abstract_class = true
+
+    def as_json(_options = {})
+      attributes = {}
+      resource.attributes.each do |name, attribute|
+        value = send(name)
+        value = value.iso8601 if value && attribute.type == :datetime
+        attributes[name] = value
+      end
+      attributes
+    end
+
+    def resource_name
+      self.class.to_s.pluralize
+    end
+
+    def resource
+      "#{resource_name}::Resource".constantize
+    end
   end
 end

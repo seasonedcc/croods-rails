@@ -8,7 +8,10 @@ module Croods
           def schema(resource, **options)
             required = []
 
-            resource.model.columns_hash.each_value do |attribute|
+            properties = resource.attributes
+            properties = resource.params if options[:write]
+
+            properties.each_value do |attribute|
               next if ignore?(options, attribute)
 
               required << attribute.name unless attribute.null

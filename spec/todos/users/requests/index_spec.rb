@@ -5,7 +5,9 @@ require 'rails_helper'
 describe 'GET /users', type: :request do
   subject { response }
 
-  let!(:user) { User.create! email: 'foo@bar.com', name: 'Foo Bar' }
+  let!(:user) do
+    User.create! email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar'
+  end
 
   context 'with valid request' do
     before do
