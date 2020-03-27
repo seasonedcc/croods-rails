@@ -5,5 +5,7 @@ module Users
     include Croods::Resource
 
     use_for_authentication!
+
+    public :index, :show
   end
 end

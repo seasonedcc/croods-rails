@@ -63,6 +63,6 @@ describe 'GET /users/:id', type: :request do
       get "/users/#{id}", headers: headers
     end
 
-    it { is_expected.to have_http_status(:unauthorized) }
+    it { is_expected.to have_http_status(:ok) }
   end
 end
