@@ -20,7 +20,7 @@ RSpec.describe Croods::Resource, type: :model do
         Foos::Resource.create_model!
       end
 
-      it { expect { Foo }.not_to raise_error(NameError) }
+      it { expect { Foo }.not_to raise_error }
     end
 
     context 'with Bars resource' do
@@ -30,7 +30,7 @@ RSpec.describe Croods::Resource, type: :model do
         Bars::Resource.create_model!
       end
 
-      it { expect { Bar }.not_to raise_error(NameError) }
+      it { expect { Bar }.not_to raise_error }
     end
   end
 
@@ -45,7 +45,7 @@ RSpec.describe Croods::Resource, type: :model do
         Foos::Resource.create_controller!
       end
 
-      it { expect { FoosController }.not_to raise_error(NameError) }
+      it { expect { FoosController }.not_to raise_error }
     end
 
     context 'with Bars resource' do
@@ -55,7 +55,7 @@ RSpec.describe Croods::Resource, type: :model do
         Bars::Resource.create_controller!
       end
 
-      it { expect { BarsController }.not_to raise_error(NameError) }
+      it { expect { BarsController }.not_to raise_error }
     end
   end
 end
