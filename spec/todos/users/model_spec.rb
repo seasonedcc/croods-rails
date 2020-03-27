@@ -9,7 +9,8 @@ RSpec.describe User, type: :model do
       name: 'Foo Bar',
       password: 'foobar',
       age: 27,
-      bio: 'Foo bar foo'
+      bio: 'Foo bar foo',
+      admin: true
     )
   end
 
@@ -27,6 +28,7 @@ RSpec.describe User, type: :model do
         name: 'Foo Bar',
         age: 27,
         bio: 'Foo bar foo',
+        admin: true,
         created_at: '2020-03-26T13:54:29Z',
         updated_at: '2020-03-26T13:54:29Z'
       }.stringify_keys

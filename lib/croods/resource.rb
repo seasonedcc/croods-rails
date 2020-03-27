@@ -3,6 +3,7 @@
 require_relative 'resource/names'
 require_relative 'resource/paths'
 require_relative 'resource/model'
+require_relative 'resource/policy'
 require_relative 'resource/controller'
 require_relative 'resource/actions'
 require_relative 'resource/attributes'
@@ -17,6 +18,7 @@ module Croods
       include Names
       include Paths
       include Model
+      include Policy
       include Controller
       include Actions
       include Attributes

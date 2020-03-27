@@ -22,9 +22,7 @@ module Croods
       end
 
       def create_controller!
-        Object.const_set(
-          controller_name, Class.new(Croods::Controller)
-        )
+        Object.const_set(controller_name, Class.new(ApplicationController))
 
         controller_blocks.each do |block|
           controller.instance_eval(&block)

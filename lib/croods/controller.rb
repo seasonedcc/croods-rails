@@ -7,7 +7,11 @@ require_relative 'controller/record_invalid'
 
 module Croods
   class Controller < ActionController::API
+    include Pundit
+
     before_action :authenticate_user!
+    after_action :verify_authorized, unless: :devise_controller?
+    after_action :verify_policy_scoped, unless: :devise_controller?
 
     include Actions
     include NotFound
@@ -17,7 +21,7 @@ module Croods
     protected
 
     def member
-      model.find(params[:id])
+      policy_scope(model).find(params[:id])
     end
 
     def member_params
