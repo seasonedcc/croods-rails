@@ -4,8 +4,8 @@ module Croods
   class Policy
     class Scope
       def initialize(user, scope)
-        @user  = user
-        @scope = scope
+        self.user  = user
+        self.scope = scope
       end
 
       def resolve
@@ -18,7 +18,7 @@ module Croods
 
       protected
 
-      attr_reader :user, :scope
+      attr_accessor :user, :scope
     end
   end
 end

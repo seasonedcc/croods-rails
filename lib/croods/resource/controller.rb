@@ -27,6 +27,12 @@ module Croods
         controller_blocks.each do |block|
           controller.instance_eval(&block)
         end
+
+        actions.each do |action|
+          controller.define_method(
+            action.name, Croods::Controller::Actions.send(action.name)
+          )
+        end
       end
     end
   end

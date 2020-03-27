@@ -3,6 +3,10 @@
 module Croods
   module Resource
     module Policy
+      def authorize(*roles, actions: nil)
+        return if roles.empty?
+      end
+
       def extend_policy(&block)
         return unless block
 

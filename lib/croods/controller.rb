@@ -13,7 +13,6 @@ module Croods
     after_action :verify_authorized, unless: :devise_controller?
     after_action :verify_policy_scoped, unless: :devise_controller?
 
-    include Actions
     include NotFound
     include AlreadyTaken
     include RecordInvalid

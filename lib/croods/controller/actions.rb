@@ -3,31 +3,43 @@
 module Croods
   class Controller < ActionController::API
     module Actions
-      def index
-        authorize model
-        render json: policy_scope(model).order(:created_at)
-      end
+      class << self
+        def index
+          lambda do
+            authorize model
+            render json: policy_scope(model).order(:created_at)
+          end
+        end
 
-      def show
-        authorize member
-        render json: member
-      end
+        def show
+          lambda do
+            authorize member
+            render json: member
+          end
+        end
 
-      def create
-        authorize model
-        render status: :created, json: policy_scope(model)
-          .create!(member_params)
-      end
+        def create
+          lambda do
+            authorize model
+            render status: :created, json: policy_scope(model)
+              .create!(member_params)
+          end
+        end
 
-      def update
-        authorize member
-        member.update!(member_params)
-        render json: member
-      end
+        def update
+          lambda do
+            authorize member
+            member.update!(member_params)
+            render json: member
+          end
+        end
 
-      def destroy
-        authorize member
-        render json: member.destroy!
+        def destroy
+          lambda do
+            authorize member
+            render json: member.destroy!
+          end
+        end
       end
     end
   end

@@ -4,11 +4,11 @@ require_relative 'policy/scope'
 
 module Croods
   class Policy
-    attr_reader :user, :member
+    DEFAULT_ROLES = %i[owner admin].freeze
 
     def initialize(user, member)
-      @user = user
-      @member = member
+      self.user = user
+      self.member = member
     end
 
     def index?
@@ -32,6 +32,13 @@ module Croods
     end
 
     protected
+
+    cattr_writer :roles
+    attr_accessor :user, :member
+
+    def roles
+      @roles || DEFAULT_ROLES
+    end
 
     def owner_or_admin?
       owner? || admin?
