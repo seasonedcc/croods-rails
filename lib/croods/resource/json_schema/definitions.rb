@@ -14,7 +14,7 @@ module Croods
           def attributes(resource)
             attributes = {}
 
-            resource.params.each_value do |attribute|
+            resource.definitions.each_value do |attribute|
               attributes[attribute.name] = {
                 type: types(attribute)
               }.merge(format(attribute))

@@ -6,11 +6,13 @@ module Croods
 
     def as_json(_options = {})
       attributes = {}
-      resource.attributes.each do |name, attribute|
+
+      resource.response_attributes.each do |name, attribute|
         value = send(name)
         value = value.iso8601 if value && attribute.type == :datetime
         attributes[name] = value
       end
+
       attributes
     end
 

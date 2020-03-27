@@ -19,8 +19,8 @@ module Croods
             def schema(resource)
               {
                 additionalProperties: false,
-                properties: Properties.schema(resource, write: true),
-                required: Required.schema(resource, write: true),
+                properties: Properties.schema(resource, request: true),
+                required: Required.schema(resource, request: true),
                 type: ['object']
               }
             end

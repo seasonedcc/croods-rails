@@ -8,8 +8,8 @@ module Croods
           def schema(resource, **options)
             required = []
 
-            properties = resource.attributes
-            properties = resource.params if options[:write]
+            properties = resource.response_attributes
+            properties = resource.request_attributes if options[:request]
 
             properties.each_value do |attribute|
               next if ignore?(options, attribute)
@@ -21,7 +21,7 @@ module Croods
           end
 
           def ignore?(options, attribute)
-            return unless options[:write]
+            return unless options[:request]
 
             return true if attribute.default || attribute.default_function
 

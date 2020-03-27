@@ -193,6 +193,7 @@ GEM
       sprockets (>= 3.0.0)
     thor (1.0.1)
     thread_safe (0.3.6)
+    timecop (0.9.1)
     tzinfo (1.2.6)
       thread_safe (~> 0.1)
     unicode-display_width (1.6.1)
@@ -214,6 +215,7 @@ DEPENDENCIES
   rubocop (= 0.80.1)
   rubocop-rspec (= 1.38.1)
   simplecov (~> 0.17.0)
+  timecop (= 0.9.1)
 
 BUNDLED WITH
    2.1.4

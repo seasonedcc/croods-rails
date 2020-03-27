@@ -1,32 +1,44 @@
 # frozen_string_literal: true
 
+require_relative 'attributes/base'
+require_relative 'attributes/request'
+require_relative 'attributes/response'
+
 module Croods
   module Resource
     module Attributes
-      def params
-        attributes.merge(additional_params)
+      include Base
+
+      def request(&block)
+        Request.instance_eval(&block)
+      end
+
+      def response(&block)
+        Response.instance_eval(&block)
+      end
+
+      def merged_attributes(type, hash = nil)
+        (hash || attributes)
+          .merge(type.additional_attributes)
+          .reject { |name| type.ignored_attributes.include?(name) }
+      end
+
+      def request_attributes
+        merged_attributes(Request)
+      end
+
+      def response_attributes
+        merged_attributes(Response)
       end
 
       def attributes
-        model.columns_hash.merge(additional_attributes)
+        merged_attributes(self, model.columns_hash)
       end
 
-      def add_attribute(name, type, **options)
-        attribute = Croods::Attribute.new(name, type, **options)
-        additional_attributes[name.to_s] = attribute
-      end
-
-      def add_param(name, type, **options)
-        attribute = Croods::Attribute.new(name, type, **options)
-        additional_params[name.to_s] = attribute
-      end
-
-      def additional_attributes
-        @additional_attributes ||= {}
-      end
-
-      def additional_params
-        @additional_params ||= {}
+      def definitions
+        attributes
+          .merge(Request.additional_attributes)
+          .merge(Response.additional_attributes)
       end
     end
   end

@@ -19,7 +19,7 @@ module Croods
     end
 
     def record_params
-      params.permit(resource.params.keys)
+      params.permit(resource.request_attributes.keys)
     end
 
     def resource_name
