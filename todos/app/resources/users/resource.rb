@@ -4,6 +4,6 @@ module Users
   module Resource
     include Croods::Resource
 
-    authenticate
+    use_for_authentication!
   end
 end

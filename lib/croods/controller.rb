@@ -7,6 +7,8 @@ require_relative 'controller/record_invalid'
 
 module Croods
   class Controller < ActionController::API
+    before_action :authenticate_user!
+
     include Actions
     include NotFound
     include AlreadyTaken

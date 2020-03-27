@@ -14,7 +14,7 @@ module Croods
         reset_password_sent_at reset_password_token tokens unconfirmed_email
       ].freeze
 
-      def authenticate(*options)
+      def use_for_authentication!(*options)
         add_model_authentication(*options)
 
         remove_attributes(*ATTRIBUTES)

@@ -37,4 +37,14 @@ describe 'DELETE /users/:id', type: :request do
     it { expect(response.body).to eq_json(error) }
     it { expect(User.find_by(email: 'foo@bar.com')).to eq(user) }
   end
+
+  context 'without current user' do
+    let(:headers) { { 'access-token' => nil } }
+
+    before do
+      delete "/users/#{user.id}", headers: headers
+    end
+
+    it { is_expected.to have_http_status(:unauthorized) }
+  end
 end

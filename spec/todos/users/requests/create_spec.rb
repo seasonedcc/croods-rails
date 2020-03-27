@@ -150,4 +150,14 @@ describe 'POST /users', type: :request do
     it { is_expected.to have_http_status(:unprocessable_entity) }
     it { expect(response.body).to eq_json(error) }
   end
+
+  context 'without current user' do
+    let(:headers) { { 'access-token' => nil } }
+
+    before do
+      post '/users', params: params.to_json, headers: headers
+    end
+
+    it { is_expected.to have_http_status(:unauthorized) }
+  end
 end
