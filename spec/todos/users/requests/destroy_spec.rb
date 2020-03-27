@@ -16,7 +16,7 @@ describe 'DELETE /users/:id', type: :request do
 
     it { is_expected.to have_http_status(:ok) }
     it { expect(response.body).to eq_json(user) }
-    it { expect(User.count).to eq(0) }
+    it { expect(User.find_by(email: 'foo@bar.com')).to be_nil }
   end
 
   context 'with invalid request' do
@@ -35,6 +35,6 @@ describe 'DELETE /users/:id', type: :request do
 
     it { is_expected.to have_http_status(:bad_request) }
     it { expect(response.body).to eq_json(error) }
-    it { expect(User.count).to eq(1) }
+    it { expect(User.find_by(email: 'foo@bar.com')).to eq(user) }
   end
 end

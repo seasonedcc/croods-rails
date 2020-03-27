@@ -14,11 +14,11 @@ module Croods
 
     protected
 
-    def record
+    def member
       model.find(params[:id])
     end
 
-    def record_params
+    def member_params
       params.permit(resource.request_attributes.keys)
     end
 

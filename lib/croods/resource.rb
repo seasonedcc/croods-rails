@@ -3,6 +3,7 @@
 require_relative 'resource/names'
 require_relative 'resource/paths'
 require_relative 'resource/model'
+require_relative 'resource/controller'
 require_relative 'resource/attributes'
 require_relative 'resource/json_schema'
 require_relative 'resource/authentication'
@@ -15,15 +16,10 @@ module Croods
       include Names
       include Paths
       include Model
+      include Controller
       include Attributes
       include JsonSchema
       include Authentication
-
-      def create_controller!
-        Object.const_set(
-          "#{namespace}Controller", Class.new(Croods::Controller)
-        )
-      end
     end
   end
 end

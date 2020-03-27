@@ -5,17 +5,13 @@ require 'rails_helper'
 describe 'GET /users', type: :request do
   subject { response }
 
-  let!(:user) do
-    User.create! email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar'
-  end
-
   context 'with valid request' do
     before do
       get '/users'
     end
 
     it { is_expected.to have_http_status(:ok) }
-    it { expect(response.body).to eq_json([user]) }
+    it { expect(response.body).to eq_json([current_user]) }
   end
 
   context 'with invalid request' do

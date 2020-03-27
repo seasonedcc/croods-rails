@@ -8,20 +8,20 @@ module Croods
       end
 
       def show
-        render json: record
+        render json: member
       end
 
       def create
-        render status: :created, json: model.create!(record_params)
+        render status: :created, json: model.create!(member_params)
       end
 
       def update
-        record.update!(record_params)
-        render json: record
+        member.update!(member_params)
+        render json: member
       end
 
       def destroy
-        render json: record.destroy!
+        render json: member.destroy!
       end
     end
   end

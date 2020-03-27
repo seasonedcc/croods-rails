@@ -4,6 +4,10 @@ module ActionDispatch
   module Routing
     class Mapper
       def mount_croods
+        Croods::Controller.instance_eval do
+          include DeviseTokenAuth::Concerns::SetUserByToken
+        end
+
         Croods.resources.each do |resource|
           resource.create_model!
           resource.create_controller!

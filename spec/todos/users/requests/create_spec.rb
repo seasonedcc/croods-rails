@@ -8,12 +8,14 @@ describe 'POST /users', type: :request do
   let(:params) { { email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar' } }
 
   context 'with valid params' do
+    let(:user) { User.find_by(email: 'foo@bar.com') }
+
     before do
       post '/users', params: params.to_json
     end
 
     it { is_expected.to have_http_status(:created) }
-    it { expect(response.body).to eq_json(User.first.to_json) }
+    it { expect(response.body).to eq_json(user) }
   end
 
   context 'with invalid param' do
