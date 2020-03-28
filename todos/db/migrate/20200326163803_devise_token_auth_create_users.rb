@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[6.0]
+class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[5.2]
   # rubocop:disable Metrics/MethodLength
   # rubocop:disable Metrics/AbcSize
   def change

@@ -1,8 +1,14 @@
 # frozen_string_literal: true
 
 RSpec.shared_context 'with current_user' do
+  let(:current_organization) do
+    Organization.create!(
+      name: 'Current Organization', slug: 'current-organization'
+    )
+  end
+
   let!(:current_user) do
-    User.create!(
+    current_organization.users.create!(
       email: 'current.user@email.com',
       name: 'Current User',
       password: 'foobar',
@@ -41,15 +47,20 @@ module JsonRequests
     super(*json_args(*args))
   end
 
+  def base_headers
+    {
+      'ACCEPT' => 'application/json',
+      'CONTENT_TYPE' => 'application/json',
+      'Organization' => current_organization.slug
+    }
+  end
+
   def json_args(path, options = {})
     auth_headers = current_user.create_new_auth_token
     [
       path,
       {
-        headers: auth_headers.merge(
-          'ACCEPT' => 'application/json',
-          'CONTENT_TYPE' => 'application/json'
-        )
+        headers: auth_headers.merge(base_headers)
       }.deep_merge(options)
     ]
   end

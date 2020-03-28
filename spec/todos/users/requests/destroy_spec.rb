@@ -6,7 +6,8 @@ describe 'DELETE /users/:id', type: :request do
   subject { response }
 
   let(:user) do
-    User.create! email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar'
+    current_organization.users
+      .create! email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar'
   end
 
   context 'with valid request' do

@@ -5,12 +5,13 @@ require_relative 'controller/not_found'
 require_relative 'controller/already_taken'
 require_relative 'controller/record_invalid'
 require_relative 'controller/forbidden'
+require_relative 'controller/multi_tenancy'
 
 module Croods
   class Controller < ActionController::API
     include Pundit
 
-    before_action :authenticate_user!
+    before_action :authenticate_user!, unless: :devise_controller?
     after_action :verify_authorized, unless: :devise_controller?
     after_action :verify_policy_scoped, unless: :devise_controller?
 
@@ -18,6 +19,7 @@ module Croods
     include AlreadyTaken
     include RecordInvalid
     include Forbidden
+    include MultiTenancy
 
     def policy_scope(scope)
       @_pundit_policy_scoped = true

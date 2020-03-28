@@ -6,7 +6,8 @@ describe 'PUT /users/:id', type: :request do
   subject { response }
 
   let(:user) do
-    User.create! email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar'
+    current_organization.users
+      .create! email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar'
   end
 
   context 'with valid params' do
@@ -113,12 +114,13 @@ describe 'PUT /users/:id', type: :request do
     let(:error) do
       {
         id: 'already_taken',
-        message: 'E-mail already taken'
+        message: 'Uid, provider already taken'
       }
     end
 
     before do
-      User.create! email: 'bar@foo.com', name: 'Bar Foo', password: 'barfoo'
+      current_organization.users
+        .create! email: 'bar@foo.com', name: 'Bar Foo', password: 'barfoo'
       put "/users/#{user.id}", params: { email: 'bar@foo.com' }.to_json
     end
 

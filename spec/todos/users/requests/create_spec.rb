@@ -143,7 +143,8 @@ describe 'POST /users', type: :request do
     end
 
     before do
-      User.create! email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar'
+      current_organization.users
+        .create! email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar'
       post '/users', params: params.to_json
     end
 

@@ -19,6 +19,10 @@ module Croods
 
         remove_attributes(*ATTRIBUTES)
 
+        if Croods.multi_tenancy?
+          remove_attribute "#{Croods.multi_tenancy_by}_id"
+        end
+
         request do
           add_attribute :password, :string, null: false
         end

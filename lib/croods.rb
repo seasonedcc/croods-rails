@@ -5,6 +5,30 @@ require 'committee'
 require 'devise'
 require 'devise_token_auth'
 require 'pundit'
+require 'schema_associations'
+require 'schema_auto_foreign_keys'
+
+module Croods
+  cattr_accessor :namespaces, :json_schema, :multi_tenancy_by
+
+  class << self
+    def initialize_for(*namespaces, multi_tenancy_by: nil)
+      self.multi_tenancy_by = multi_tenancy_by
+      self.namespaces = namespaces.map(&:to_s).freeze
+      Middleware.insert!
+    end
+
+    def resources
+      namespaces.map do |namespace|
+        "#{namespace.camelcase(:upper)}::Resource".constantize
+      end
+    end
+
+    def multi_tenancy?
+      !multi_tenancy_by.nil?
+    end
+  end
+end
 
 require 'croods/railtie'
 require 'croods/model'
@@ -16,18 +40,3 @@ require 'croods/resource'
 require 'croods/routes'
 require 'croods/middleware'
 require 'croods/api'
-
-module Croods
-  cattr_accessor :namespaces, :json_schema
-
-  def self.initialize_for(*namespaces)
-    Croods.namespaces = namespaces.map(&:to_s).freeze
-    Middleware.insert!
-  end
-
-  def self.resources
-    Croods.namespaces.map do |namespace|
-      "#{namespace.camelcase(:upper)}::Resource".constantize
-    end
-  end
-end

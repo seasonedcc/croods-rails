@@ -5,6 +5,7 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   subject(:user) do
     described_class.create!(
+      organization: current_organization,
       email: 'foo@bar.com',
       name: 'Foo Bar',
       password: 'foobar',
