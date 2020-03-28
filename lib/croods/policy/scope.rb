@@ -9,9 +9,9 @@ module Croods
       end
 
       def resolve
-        return scope if user&.admin?
+        return scope if super?
 
-        return scope unless scope.has_attribute? :user_id
+        return scope unless owner? && scope.has_attribute?(:user_id)
 
         scope.where(user_id: user.id)
       end
@@ -19,6 +19,26 @@ module Croods
       protected
 
       attr_accessor :user, :scope
+
+      def super?
+        super_roles.each do |role|
+          return true if user&.send("#{role}?")
+        end
+
+        false
+      end
+
+      def roles
+        action.roles || DEFAULT_ROLES
+      end
+
+      def super_roles
+        roles.reject { |role| role == :owner }
+      end
+
+      def owner?
+        roles.include?(:owner)
+      end
     end
   end
 end

@@ -70,6 +70,7 @@ module Croods
         actions.each do |action|
           policy.define_method("#{action.name}?") { authorize_action(action) }
           policy_scope.const_set(action.name.to_s.titleize, policy_scope)
+          policy_scope(action.name).define_method(:action) { action }
         end
       end
     end
