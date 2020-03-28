@@ -11,38 +11,10 @@ module Croods
       self.member = member
     end
 
-    def index?
-      owner_or_admin?
-    end
-
-    def show?
-      owner_or_admin?
-    end
-
-    def create?
-      owner_or_admin?
-    end
-
-    def update?
-      owner_or_admin?
-    end
-
-    def destroy?
-      owner_or_admin?
-    end
-
     protected
 
     cattr_writer :roles
     attr_accessor :user, :member
-
-    def roles
-      @roles || DEFAULT_ROLES
-    end
-
-    def owner_or_admin?
-      owner? || admin?
-    end
 
     def admin?
       user&.admin?
@@ -54,6 +26,27 @@ module Croods
       return false unless user
 
       member.user_id == user.id
+    end
+
+    def authorize_action(action)
+      return true if action.public
+
+      roles = action.roles || DEFAULT_ROLES
+
+      roles.each do |role|
+        return true if authorize_role(role)
+      end
+
+      false
+    end
+
+    def authorize_role(role)
+      name = "#{role}?"
+      return send(name) if respond_to?(name, true)
+
+      return user.send(name) if user.respond_to?(name)
+
+      false
     end
   end
 end

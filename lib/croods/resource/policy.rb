@@ -3,8 +3,32 @@
 module Croods
   module Resource
     module Policy
-      def authorize(*roles, actions: nil)
+      def authorize(*roles, on: nil)
         return if roles.empty?
+
+        on = [on] if on&.is_a?(Symbol)
+
+        actions.each do |action|
+          next if on && !on.include?(action.name)
+
+          action.roles = roles
+        end
+      end
+
+      def public(*names)
+        return unless names
+
+        names = [names] if names&.is_a?(Symbol)
+
+        extend_controller do
+          skip_before_action :authenticate_user!, only: names
+        end
+
+        actions.each do |action|
+          next unless names.include?(action.name)
+
+          action.public = true
+        end
       end
 
       def extend_policy(&block)
@@ -30,6 +54,12 @@ module Croods
 
         policy_blocks.each do |block|
           policy.instance_eval(&block)
+        end
+
+        actions.each do |action|
+          policy.define_method("#{action.name}?") do
+            authorize_action(action)
+          end
         end
       end
     end

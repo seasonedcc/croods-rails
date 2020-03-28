@@ -65,4 +65,22 @@ describe 'GET /users/:id', type: :request do
 
     it { is_expected.to have_http_status(:ok) }
   end
+
+  context 'when current user is not admin but is a supervisor' do
+    before do
+      current_user.update! admin: false, supervisor: true
+      get "/users/#{id}"
+    end
+
+    it { is_expected.to have_http_status(:ok) }
+  end
+
+  context 'when current user is not admin or supervisor' do
+    before do
+      current_user.update! admin: false, supervisor: false
+      get "/users/#{id}"
+    end
+
+    it { is_expected.to have_http_status(:ok) }
+  end
 end

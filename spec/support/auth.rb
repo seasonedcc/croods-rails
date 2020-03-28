@@ -5,7 +5,9 @@ RSpec.shared_context 'with current_user' do
     User.create!(
       email: 'current.user@email.com',
       name: 'Current User',
-      password: 'foobar'
+      password: 'foobar',
+      admin: true,
+      supervisor: true
     )
   end
 end

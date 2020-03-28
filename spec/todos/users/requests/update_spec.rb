@@ -139,4 +139,30 @@ describe 'PUT /users/:id', type: :request do
 
     it { is_expected.to have_http_status(:unauthorized) }
   end
+
+  context 'when current user is not admin but is a supervisor' do
+    before do
+      current_user.update! admin: false, supervisor: true
+      put "/users/#{user.id}", params: { name: 'Bar Foo' }.to_json
+    end
+
+    it { is_expected.to have_http_status(:ok) }
+  end
+
+  context 'when current user is not admin or supervisor' do
+    let(:error) do
+      {
+        id: 'forbidden',
+        message: 'not allowed to update? this User'
+      }
+    end
+
+    before do
+      current_user.update! admin: false, supervisor: false
+      put "/users/#{user.id}", params: { name: 'Bar Foo' }.to_json
+    end
+
+    it { is_expected.to have_http_status(:forbidden) }
+    it { expect(response.body).to eq_json(error) }
+  end
 end

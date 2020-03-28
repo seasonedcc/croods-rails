@@ -4,6 +4,7 @@ require_relative 'controller/actions'
 require_relative 'controller/not_found'
 require_relative 'controller/already_taken'
 require_relative 'controller/record_invalid'
+require_relative 'controller/forbidden'
 
 module Croods
   class Controller < ActionController::API
@@ -16,6 +17,7 @@ module Croods
     include NotFound
     include AlreadyTaken
     include RecordInvalid
+    include Forbidden
 
     protected
 

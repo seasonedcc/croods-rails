@@ -47,4 +47,30 @@ describe 'DELETE /users/:id', type: :request do
 
     it { is_expected.to have_http_status(:unauthorized) }
   end
+
+  context 'when current user is not admin but is a supervisor' do
+    before do
+      current_user.update! admin: false, supervisor: true
+      delete "/users/#{user.id}"
+    end
+
+    it { is_expected.to have_http_status(:forbidden) }
+  end
+
+  context 'when current user is not admin or supervisor' do
+    let(:error) do
+      {
+        id: 'forbidden',
+        message: 'not allowed to destroy? this User'
+      }
+    end
+
+    before do
+      current_user.update! admin: false, supervisor: false
+      delete "/users/#{user.id}"
+    end
+
+    it { is_expected.to have_http_status(:forbidden) }
+    it { expect(response.body).to eq_json(error) }
+  end
 end
