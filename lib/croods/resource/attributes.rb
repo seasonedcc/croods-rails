@@ -10,11 +10,19 @@ module Croods
       include Base
 
       def request(&block)
-        Request.instance_eval(&block)
+        request_instance.instance_eval(&block)
       end
 
       def response(&block)
-        Response.instance_eval(&block)
+        response_instance.instance_eval(&block)
+      end
+
+      def request_instance
+        @request_instance ||= Request.new
+      end
+
+      def response_instance
+        @response_instance ||= Response.new
       end
 
       def merged_attributes(type, hash = nil)
@@ -24,11 +32,11 @@ module Croods
       end
 
       def request_attributes
-        merged_attributes(Request)
+        merged_attributes(request_instance)
       end
 
       def response_attributes
-        merged_attributes(Response)
+        merged_attributes(response_instance)
       end
 
       def attributes
@@ -37,8 +45,8 @@ module Croods
 
       def definitions
         attributes
-          .merge(Request.additional_attributes)
-          .merge(Response.additional_attributes)
+          .merge(request_instance.additional_attributes)
+          .merge(response_instance.additional_attributes)
       end
     end
   end

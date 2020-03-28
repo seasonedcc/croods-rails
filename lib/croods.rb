@@ -7,6 +7,7 @@ require 'devise_token_auth'
 require 'pundit'
 require 'schema_associations'
 require 'schema_auto_foreign_keys'
+require 'schema_validations'
 
 module Croods
   cattr_accessor :namespaces, :json_schema, :multi_tenancy_by

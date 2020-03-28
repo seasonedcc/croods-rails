@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rails', '5.2.4.2'
   spec.add_dependency 'schema_associations', '1.2.7'
   spec.add_dependency 'schema_auto_foreign_keys', '0.1.3'
+  spec.add_dependency 'schema_validations', '2.3.0'
 
   spec.add_development_dependency 'pg'
   spec.add_development_dependency 'rack-cors', '1.1.1'

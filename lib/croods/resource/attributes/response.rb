@@ -5,8 +5,8 @@ require_relative 'base'
 module Croods
   module Resource
     module Attributes
-      module Response
-        extend Base
+      class Response
+        include Base
       end
     end
   end

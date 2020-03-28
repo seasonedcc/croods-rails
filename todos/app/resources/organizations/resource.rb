@@ -2,5 +2,6 @@
 
 module Organizations
   class Resource < ApplicationResource
+    authorize :admin
   end
 end

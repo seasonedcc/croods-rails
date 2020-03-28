@@ -16,8 +16,10 @@ ActiveRecord::Schema.define(version: 2020_03_28_135524) do
   enable_extension "plpgsql"
 
   create_table "organizations", force: :cascade do |t|
-    t.string "name", :null=>false
-    t.string "slug", :null=>false, :index=>{:name=>"index_organizations_on_slug", :unique=>true}
+    t.string   "name",       :null=>false
+    t.string   "slug",       :null=>false, :index=>{:name=>"index_organizations_on_slug", :unique=>true}
+    t.datetime "created_at", :null=>false
+    t.datetime "updated_at", :null=>false
   end
 
   create_table "users", force: :cascade do |t|
@@ -37,8 +39,8 @@ ActiveRecord::Schema.define(version: 2020_03_28_135524) do
     t.integer  "age"
     t.text     "bio"
     t.json     "tokens"
-    t.datetime "created_at",             :precision=>6, :null=>false
-    t.datetime "updated_at",             :precision=>6, :null=>false
+    t.datetime "created_at",             :null=>false
+    t.datetime "updated_at",             :null=>false
     t.boolean  "admin",                  :default=>false, :null=>false
     t.boolean  "supervisor",             :default=>false, :null=>false
     t.bigint   "organization_id",        :null=>false, :foreign_key=>{:references=>"organizations", :name=>"fk_users_organization_id", :on_update=>:no_action, :on_delete=>:no_action}, :index=>{:name=>"fk__users_organization_id"}

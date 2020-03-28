@@ -19,8 +19,10 @@ module Croods
         "#{Croods.multi_tenancy_by}_id".to_sym
       end
 
-      def tenant_params
+      def tenant_params(model)
         return {} unless Croods.multi_tenancy?
+
+        return {} unless model.has_attribute? tenant_param
 
         { tenant_param => current_tenant.id }
       end
