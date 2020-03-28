@@ -19,6 +19,11 @@ module Croods
     include RecordInvalid
     include Forbidden
 
+    def policy_scope(scope)
+      @_pundit_policy_scoped = true
+      resource.policy_scope(action_name).new(current_user, scope).resolve
+    end
+
     protected
 
     def member

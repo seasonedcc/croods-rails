@@ -45,21 +45,31 @@ module Croods
         policy_name.constantize
       end
 
+      def policy_scope(action = nil)
+        policy_scope_name(action).constantize
+      end
+
       def policy_name
         "#{model_name}Policy"
       end
 
+      def policy_scope_name(action = nil)
+        name = "#{policy_name}::Scope"
+        return name unless action
+
+        "#{name}::#{action.to_s.titleize}"
+      end
+
       def create_policy!
         Object.const_set(policy_name, Class.new(Croods::Policy))
+        policy_blocks.each { |block| policy.instance_eval(&block) }
+        create_policy_actions!
+      end
 
-        policy_blocks.each do |block|
-          policy.instance_eval(&block)
-        end
-
+      def create_policy_actions!
         actions.each do |action|
-          policy.define_method("#{action.name}?") do
-            authorize_action(action)
-          end
+          policy.define_method("#{action.name}?") { authorize_action(action) }
+          policy_scope.const_set(action.name.to_s.titleize, policy_scope)
         end
       end
     end
