@@ -12,6 +12,24 @@ describe 'GET /users/:id', type: :request do
 
   let(:id) { user.id }
 
+  let(:one_organization) { Organization.create!(name: 'Foo', slug: 'foo') }
+  let(:another_organization) { Organization.create!(name: 'Bar', slug: 'bar') }
+
+  let(:one_user) do
+    one_organization.users
+      .create! email: 'one@another.com', name: 'Foo Bar', password: 'foobar'
+  end
+
+  let(:another_user) do
+    another_organization.users
+      .create! email: 'another@another.com', name: 'Bar Foo', password: 'barfoo'
+  end
+
+  before do
+    one_user
+    another_user
+  end
+
   context 'with valid request' do
     before do
       get "/users/#{id}"
@@ -45,7 +63,8 @@ describe 'GET /users/:id', type: :request do
     let(:error) do
       {
         id: 'not_found',
-        message: "Couldn't find User with 'id'=#{id}"
+        message: "Couldn't find User with 'id'=#{id} " \
+           '[WHERE "users"."organization_id" = $1]'
       }
     end
 
@@ -83,5 +102,24 @@ describe 'GET /users/:id', type: :request do
     end
 
     it { is_expected.to have_http_status(:ok) }
+  end
+
+  context 'when user is from another organization' do
+    let(:id) { another_user.id }
+
+    let(:error) do
+      {
+        id: 'not_found',
+        message: "Couldn't find User with 'id'=#{id} " \
+           '[WHERE "users"."organization_id" = $1]'
+      }
+    end
+
+    before do
+      get "/users/#{id}"
+    end
+
+    it { is_expected.to have_http_status(:not_found) }
+    it { expect(response.body).to eq_json(error) }
   end
 end

@@ -51,7 +51,7 @@ module JsonRequests
     {
       'ACCEPT' => 'application/json',
       'CONTENT_TYPE' => 'application/json',
-      'Organization' => current_organization.slug
+      'Tenant' => current_organization.slug
     }
   end
 

@@ -3,12 +3,15 @@
 module Croods
   class Policy
     class Scope
-      def initialize(user, scope)
+      def initialize(tenant:, user:, scope:)
         self.user  = user
         self.scope = scope
+        self.tenant = user&.tenant || tenant
       end
 
       def resolve
+        self.scope = scope.where(tenant_scope) if multi_tenancy?
+
         return scope if super?
 
         return scope unless owner? && scope.has_attribute?(:user_id)
@@ -18,7 +21,17 @@ module Croods
 
       protected
 
-      attr_accessor :user, :scope
+      attr_accessor :tenant, :user, :scope
+
+      def multi_tenancy?
+        return unless Croods.multi_tenancy?
+
+        scope.has_attribute?(Croods.tenant_attribute)
+      end
+
+      def tenant_scope
+        { Croods.tenant_attribute => tenant.id }
+      end
 
       def super?
         super_roles.each do |role|

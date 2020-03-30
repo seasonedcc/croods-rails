@@ -18,10 +18,7 @@ module Croods
         add_model_authentication(*options)
 
         remove_attributes(*ATTRIBUTES)
-
-        if Croods.multi_tenancy?
-          remove_attribute "#{Croods.multi_tenancy_by}_id"
-        end
+        remove_attribute(Croods.tenant_attribute) if Croods.multi_tenancy?
 
         request do
           add_attribute :password, :string, null: false

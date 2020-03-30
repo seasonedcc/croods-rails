@@ -23,7 +23,8 @@ module Croods
 
     def policy_scope(scope)
       @_pundit_policy_scoped = true
-      resource.policy_scope(action_name).new(current_user, scope).resolve
+      resource.policy_scope(action_name)
+        .new(tenant: header_tenant, user: current_user, scope: scope).resolve
     end
 
     protected

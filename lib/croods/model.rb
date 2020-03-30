@@ -16,6 +16,12 @@ module Croods
       attributes
     end
 
+    def tenant
+      return unless Croods.multi_tenancy?
+
+      public_send(Croods.multi_tenancy_by)
+    end
+
     def resource_name
       self.class.to_s.pluralize
     end

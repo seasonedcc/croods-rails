@@ -11,20 +11,26 @@ module Croods
 
       protected
 
-      def current_tenant
-        @current_tenant ||= current_user.send(Croods.multi_tenancy_by)
+      def tenant_model
+        Croods.multi_tenancy_by.to_s.titleize.constantize
       end
 
-      def tenant_param
-        "#{Croods.multi_tenancy_by}_id".to_sym
+      def header_tenant
+        tenant_model.find_by!(slug: request.headers['Tenant'])
+      end
+
+      def current_tenant
+        return unless Croods.multi_tenancy?
+
+        @current_tenant ||= current_user&.tenant
       end
 
       def tenant_params(model)
         return {} unless Croods.multi_tenancy?
 
-        return {} unless model.has_attribute? tenant_param
+        return {} unless model.has_attribute? Croods.tenant_attribute
 
-        { tenant_param => current_tenant.id }
+        { Croods.tenant_attribute => current_tenant.id }
       end
 
       def authorize_multi_tenancy
@@ -32,7 +38,7 @@ module Croods
 
         return unless current_user
 
-        return if request.headers['Organization'] == current_tenant.slug
+        return if request.headers['Tenant'] == current_tenant.slug
 
         raise(
           Pundit::NotAuthorizedError,

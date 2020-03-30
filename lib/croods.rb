@@ -28,6 +28,10 @@ module Croods
     def multi_tenancy?
       !multi_tenancy_by.nil?
     end
+
+    def tenant_attribute
+      "#{Croods.multi_tenancy_by}_id".to_sym
+    end
   end
 end
 

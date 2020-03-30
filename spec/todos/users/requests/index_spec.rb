@@ -5,6 +5,24 @@ require 'rails_helper'
 describe 'GET /users', type: :request do
   subject { response }
 
+  let(:one_organization) { Organization.create!(name: 'Foo', slug: 'foo') }
+  let(:another_organization) { Organization.create!(name: 'Bar', slug: 'bar') }
+
+  let(:one_user) do
+    one_organization.users
+      .create! email: 'one@another.com', name: 'Foo Bar', password: 'foobar'
+  end
+
+  let(:another_user) do
+    another_organization.users
+      .create! email: 'another@another.com', name: 'Bar Foo', password: 'barfoo'
+  end
+
+  before do
+    one_user
+    another_user
+  end
+
   context 'with valid request' do
     before do
       get '/users'
