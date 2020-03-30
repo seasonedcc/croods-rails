@@ -10,7 +10,7 @@ module Croods
       end
 
       def resolve
-        self.scope = scope.where(tenant_scope) if multi_tenancy?
+        self.scope = tenant_scope(scope) if multi_tenancy?
 
         return scope if super?
 
@@ -24,13 +24,19 @@ module Croods
       attr_accessor :tenant, :user, :scope
 
       def multi_tenancy?
-        return unless Croods.multi_tenancy?
+        return false unless Croods.multi_tenancy?
 
-        scope.has_attribute?(Croods.tenant_attribute)
+        scope.has_attribute?(Croods.tenant_attribute) ||
+          scope.has_attribute?(:user_id)
       end
 
-      def tenant_scope
-        { Croods.tenant_attribute => tenant.id }
+      def tenant_scope(scope)
+        if scope.has_attribute?(Croods.tenant_attribute)
+          return scope.where(Croods.tenant_attribute => tenant.id)
+        end
+
+        scope.joins(:user)
+          .where(users: { Croods.tenant_attribute => tenant.id })
       end
 
       def super?

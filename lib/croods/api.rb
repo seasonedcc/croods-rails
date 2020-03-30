@@ -3,9 +3,12 @@
 module Croods
   module Api
     class << self
+      def initial_schema
+        File.read(File.expand_path('api/initial_schema.json', __dir__))
+      end
+
       def json_schema
-        json = File.read(File.expand_path('api/initial_schema.json', __dir__))
-        schema = JSON.parse(json)
+        schema = JSON.parse(initial_schema)
 
         Croods.resources.each do |resource|
           next unless resource.table_exists?

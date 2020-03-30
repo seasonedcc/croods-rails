@@ -22,7 +22,11 @@ module Croods
           lambda do
             authorize model
             render status: :created, json: policy_scope(model)
-              .create!(member_params.merge(tenant_params(model)))
+              .create!(
+                member_params
+                  .merge(tenant_params(model))
+                  .merge(user_params(model))
+              )
           end
         end
 

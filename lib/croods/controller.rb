@@ -29,6 +29,12 @@ module Croods
 
     protected
 
+    def user_params(model)
+      return {} unless model.has_attribute? :user_id
+
+      { user_id: current_user&.id }
+    end
+
     def member
       policy_scope(model).find(params[:id])
     end

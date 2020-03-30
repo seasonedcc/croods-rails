@@ -21,7 +21,7 @@ module Croods
     end
 
     def owner?
-      return true unless member.has_attribute? :user_id
+      return true unless member.respond_to? :user_id
 
       return false unless user
 
