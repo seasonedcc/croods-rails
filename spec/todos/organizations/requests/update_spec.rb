@@ -2,17 +2,19 @@
 
 require 'rails_helper'
 
-describe 'PUT /organizations/:id', type: :request do
+describe 'PUT /organizations/:slug', type: :request do
   subject { response }
 
   let(:organization) do
     Organization.create name: 'Foo', slug: 'foo'
   end
 
+  let(:slug) { organization.slug }
+
   context 'with valid params' do
     before do
       put(
-        "/organizations/#{organization.id}", params: { name: 'Bar Foo' }.to_json
+        "/organizations/#{slug}", params: { name: 'Bar Foo' }.to_json
       )
     end
 
@@ -33,7 +35,7 @@ describe 'PUT /organizations/:id', type: :request do
     end
 
     before do
-      put "/organizations/#{organization.id}", params: params.to_json
+      put "/organizations/#{slug}", params: params.to_json
     end
 
     it { is_expected.to have_http_status(:bad_request) }
@@ -53,7 +55,7 @@ describe 'PUT /organizations/:id', type: :request do
     end
 
     before do
-      put "/organizations/#{organization.id}", params: params.to_json
+      put "/organizations/#{slug}", params: params.to_json
     end
 
     it { is_expected.to have_http_status(:bad_request) }
@@ -79,7 +81,7 @@ describe 'PUT /organizations/:id', type: :request do
     end
 
     before do
-      put "/organizations/#{organization.id}", params: params.to_json
+      put "/organizations/#{slug}", params: params.to_json
     end
 
     it { is_expected.to have_http_status(:bad_request) }
@@ -105,7 +107,7 @@ describe 'PUT /organizations/:id', type: :request do
     end
 
     before do
-      put "/organizations/#{organization.id}", params: params.to_json
+      put "/organizations/#{slug}", params: params.to_json
     end
 
     it { is_expected.to have_http_status(:bad_request) }
@@ -122,7 +124,7 @@ describe 'PUT /organizations/:id', type: :request do
 
     before do
       Organization.create! name: 'Bar', slug: 'bar'
-      put "/organizations/#{organization.id}", params: { slug: 'bar' }.to_json
+      put "/organizations/#{slug}", params: { slug: 'bar' }.to_json
     end
 
     it { is_expected.to have_http_status(:unprocessable_entity) }
@@ -134,7 +136,7 @@ describe 'PUT /organizations/:id', type: :request do
 
     before do
       put(
-        "/organizations/#{organization.id}",
+        "/organizations/#{slug}",
         params: { name: 'Bar Foo' }.to_json,
         headers: headers
       )
@@ -154,7 +156,7 @@ describe 'PUT /organizations/:id', type: :request do
     before do
       current_user.update! admin: false, supervisor: true
       put(
-        "/organizations/#{organization.id}", params: { name: 'Bar Foo' }.to_json
+        "/organizations/#{slug}", params: { name: 'Bar Foo' }.to_json
       )
     end
 
@@ -173,7 +175,7 @@ describe 'PUT /organizations/:id', type: :request do
     before do
       current_user.update! admin: false, supervisor: false
       put(
-        "/organizations/#{organization.id}", params: { name: 'Bar Foo' }.to_json
+        "/organizations/#{slug}", params: { name: 'Bar Foo' }.to_json
       )
     end
 

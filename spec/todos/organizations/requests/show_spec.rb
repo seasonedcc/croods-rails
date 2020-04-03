@@ -2,18 +2,18 @@
 
 require 'rails_helper'
 
-describe 'GET /organizations/:id', type: :request do
+describe 'GET /organizations/:slug', type: :request do
   subject { response }
 
   let(:organization) do
     Organization.create name: 'Foo', slug: 'foo'
   end
 
-  let(:id) { organization.id }
+  let(:slug) { organization.slug }
 
   context 'with valid request' do
     before do
-      get "/organizations/#{id}"
+      get "/organizations/#{slug}"
     end
 
     it { is_expected.to have_http_status(:ok) }
@@ -31,7 +31,7 @@ describe 'GET /organizations/:id', type: :request do
     end
 
     before do
-      get "/organizations/#{id}?foo=bar"
+      get "/organizations/#{slug}?foo=bar"
     end
 
     it { is_expected.to have_http_status(:bad_request) }
@@ -39,17 +39,17 @@ describe 'GET /organizations/:id', type: :request do
   end
 
   context 'with record not found' do
-    let(:id) { organization.id + 1 }
+    let(:slug) { 'bar' }
 
     let(:error) do
       {
         id: 'not_found',
-        message: "Couldn't find Organization with 'id'=#{id}"
+        message: "Couldn't find Organization"
       }
     end
 
     before do
-      get "/organizations/#{id}"
+      get "/organizations/#{slug}"
     end
 
     it { is_expected.to have_http_status(:not_found) }
@@ -60,7 +60,7 @@ describe 'GET /organizations/:id', type: :request do
     let(:headers) { { 'access-token' => nil } }
 
     before do
-      get "/organizations/#{id}", headers: headers
+      get "/organizations/#{slug}", headers: headers
     end
 
     it { is_expected.to have_http_status(:unauthorized) }
@@ -69,7 +69,7 @@ describe 'GET /organizations/:id', type: :request do
   context 'when current user is not admin but is a supervisor' do
     before do
       current_user.update! admin: false, supervisor: true
-      get "/organizations/#{id}"
+      get "/organizations/#{slug}"
     end
 
     it { is_expected.to have_http_status(:forbidden) }
@@ -78,7 +78,7 @@ describe 'GET /organizations/:id', type: :request do
   context 'when current user is not admin or supervisor' do
     before do
       current_user.update! admin: false, supervisor: false
-      get "/organizations/#{id}"
+      get "/organizations/#{slug}"
     end
 
     it { is_expected.to have_http_status(:forbidden) }

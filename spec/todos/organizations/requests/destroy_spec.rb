@@ -2,16 +2,18 @@
 
 require 'rails_helper'
 
-describe 'DELETE /organizations/:id', type: :request do
+describe 'DELETE /organizations/:slug', type: :request do
   subject { response }
 
   let(:organization) do
     Organization.create name: 'Foo', slug: 'foo'
   end
 
+  let(:slug) { organization.slug }
+
   context 'with valid request' do
     before do
-      delete "/organizations/#{organization.id}"
+      delete "/organizations/#{slug}"
     end
 
     it { is_expected.to have_http_status(:ok) }
@@ -30,7 +32,7 @@ describe 'DELETE /organizations/:id', type: :request do
     end
 
     before do
-      delete "/organizations/#{organization.id}", params: { foo: 'bar' }.to_json
+      delete "/organizations/#{slug}", params: { foo: 'bar' }.to_json
     end
 
     it { is_expected.to have_http_status(:bad_request) }
@@ -42,7 +44,7 @@ describe 'DELETE /organizations/:id', type: :request do
     let(:headers) { { 'access-token' => nil } }
 
     before do
-      delete "/organizations/#{organization.id}", headers: headers
+      delete "/organizations/#{slug}", headers: headers
     end
 
     it { is_expected.to have_http_status(:unauthorized) }
@@ -58,7 +60,7 @@ describe 'DELETE /organizations/:id', type: :request do
 
     before do
       current_user.update! admin: false, supervisor: true
-      delete "/organizations/#{organization.id}"
+      delete "/organizations/#{slug}"
     end
 
     it { is_expected.to have_http_status(:forbidden) }
@@ -75,7 +77,7 @@ describe 'DELETE /organizations/:id', type: :request do
 
     before do
       current_user.update! admin: false, supervisor: false
-      delete "/organizations/#{organization.id}"
+      delete "/organizations/#{slug}"
     end
 
     it { is_expected.to have_http_status(:forbidden) }

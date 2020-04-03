@@ -41,7 +41,7 @@ module Croods
           end
 
           def identity(resource)
-            resource.ref(:id)
+            resource.ref(resource.identifier)
           end
         end
       end

@@ -10,7 +10,7 @@ module ActionDispatch
           resource.create_model!
           resource.create_policy!
           resource.create_controller!
-          resources resource.route_name
+          resources resource.route_name, param: resource.identifier
         end
 
         Croods.json_schema = Croods::Api.json_schema

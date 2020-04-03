@@ -2,6 +2,7 @@
 
 require_relative 'resource/names'
 require_relative 'resource/paths'
+require_relative 'resource/identifier'
 require_relative 'resource/model'
 require_relative 'resource/policy'
 require_relative 'resource/controller'
@@ -17,6 +18,7 @@ module Croods
     class_methods do
       include Names
       include Paths
+      include Identifier
       include Model
       include Policy
       include Controller
