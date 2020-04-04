@@ -2,37 +2,46 @@
 
 require 'rails_helper'
 
-describe 'POST /users', type: :request do
+describe 'POST /lists', type: :request do
   subject { response }
 
-  let(:params) { { email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar' } }
+  let(:project) { current_user.projects.create! name: 'Foo' }
+
+  let(:params) { { name: 'Foo Bar', project_id: project.id } }
+
+  let(:another_user) do
+    current_organization.users
+      .create! email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar'
+  end
+
+  let(:another_project) { another_user.projects.create! name: 'Bar' }
 
   context 'with valid params' do
-    let(:user) { User.find_by(email: 'foo@bar.com') }
+    let(:list) { List.find_by(name: 'Foo Bar') }
 
     before do
-      post '/users', params: params.to_json
+      post '/lists', params: params.to_json
     end
 
     it { is_expected.to have_http_status(:created) }
-    it { expect(response.body).to eq_json(user) }
+    it { expect(response.body).to eq_json(list) }
   end
 
   context 'with invalid param' do
     let(:params) do
-      { email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar', foo: 'bar' }
+      { name: 'Foo Bar', project_id: project.id, foo: 'bar' }
     end
 
     let(:error) do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/user/links/1/schema: "foo" is not a permitted key.'
+          '#/definitions/list/links/1/schema: "foo" is not a permitted key.'
       }
     end
 
     before do
-      post '/users', params: params.to_json
+      post '/lists', params: params.to_json
     end
 
     it { is_expected.to have_http_status(:bad_request) }
@@ -41,20 +50,20 @@ describe 'POST /users', type: :request do
 
   context 'with id param' do
     let(:params) do
-      { email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar', id: 123 }
+      { name: 'Foo Bar', project_id: project.id, id: 123 }
     end
 
     let(:error) do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/user/links/1/schema: "id" is not a ' \
+          '#/definitions/list/links/1/schema: "id" is not a ' \
           'permitted key.'
       }
     end
 
     before do
-      post '/users', params: params.to_json
+      post '/lists', params: params.to_json
     end
 
     it { is_expected.to have_http_status(:bad_request) }
@@ -64,9 +73,8 @@ describe 'POST /users', type: :request do
   context 'with created_at param' do
     let(:params) do
       {
-        email: 'foo@bar.com',
         name: 'Foo Bar',
-        password: 'foobar',
+        project_id: project.id,
         created_at: '2018-11-13T20:20:39+00:00'
       }
     end
@@ -75,13 +83,13 @@ describe 'POST /users', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/user/links/1/schema: "created_at" is not a ' \
+          '#/definitions/list/links/1/schema: "created_at" is not a ' \
           'permitted key.'
       }
     end
 
     before do
-      post '/users', params: params.to_json
+      post '/lists', params: params.to_json
     end
 
     it { is_expected.to have_http_status(:bad_request) }
@@ -91,9 +99,8 @@ describe 'POST /users', type: :request do
   context 'with updated_at param' do
     let(:params) do
       {
-        email: 'foo@bar.com',
         name: 'Foo Bar',
-        password: 'foobar',
+        project_id: project.id,
         updated_at: '2018-11-13T20:20:39+00:00'
       }
     end
@@ -102,13 +109,13 @@ describe 'POST /users', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/user/links/1/schema: "updated_at" is not a ' \
+          '#/definitions/list/links/1/schema: "updated_at" is not a ' \
           'permitted key.'
       }
     end
 
     before do
-      post '/users', params: params.to_json
+      post '/lists', params: params.to_json
     end
 
     it { is_expected.to have_http_status(:bad_request) }
@@ -116,39 +123,21 @@ describe 'POST /users', type: :request do
   end
 
   context 'without all required params' do
-    let(:params) { { email: 'foo@bar.com', password: 'foobar' } }
+    let(:params) { { project_id: project.id } }
 
     let(:error) do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/user/links/1/schema: "name" wasn\'t supplied.'
+          '#/definitions/list/links/1/schema: "name" wasn\'t supplied.'
       }
     end
 
     before do
-      post '/users', params: params.to_json
+      post '/lists', params: params.to_json
     end
 
     it { is_expected.to have_http_status(:bad_request) }
-    it { expect(response.body).to eq_json(error) }
-  end
-
-  context 'with email already taken' do
-    let(:error) do
-      {
-        id: 'record_invalid',
-        message: 'Validation failed: E-mail has already been taken'
-      }
-    end
-
-    before do
-      current_organization.users
-        .create! email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar'
-      post '/users', params: params.to_json
-    end
-
-    it { is_expected.to have_http_status(:unprocessable_entity) }
     it { expect(response.body).to eq_json(error) }
   end
 
@@ -156,7 +145,7 @@ describe 'POST /users', type: :request do
     let(:headers) { { 'access-token' => nil } }
 
     before do
-      post '/users', params: params.to_json, headers: headers
+      post '/lists', params: params.to_json, headers: headers
     end
 
     it { is_expected.to have_http_status(:unauthorized) }
@@ -165,26 +154,40 @@ describe 'POST /users', type: :request do
   context 'when current user is not admin but is a supervisor' do
     before do
       current_user.update! admin: false, supervisor: true
-      post '/users', params: params.to_json
+      post '/lists', params: params.to_json
     end
 
     it { is_expected.to have_http_status(:created) }
   end
 
   context 'when current user is not admin or supervisor' do
+    before do
+      current_user.update! admin: false, supervisor: false
+      post '/lists', params: params.to_json
+    end
+
+    it { is_expected.to have_http_status(:created) }
+  end
+
+  context 'with a project from another user' do
+    let(:params) { { name: 'Foo Bar', project_id: another_project.id } }
+
+    let(:list) { List.find_by(name: 'Foo Bar') }
+
     let(:error) do
       {
         id: 'forbidden',
-        message: 'not allowed to create? this User'
+        message: 'not allowed to create? this List'
       }
     end
 
     before do
-      current_user.update! admin: false, supervisor: false
-      post '/users', params: params.to_json
+      current_user.update! admin: false
+      post '/lists', params: params.to_json
     end
 
     it { is_expected.to have_http_status(:forbidden) }
+    it { expect(list).to be_nil }
     it { expect(response.body).to eq_json(error) }
   end
 end

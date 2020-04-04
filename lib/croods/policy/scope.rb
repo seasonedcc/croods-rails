@@ -10,33 +10,94 @@ module Croods
       end
 
       def resolve
-        self.scope = tenant_scope(scope) if multi_tenancy?
+        self.scope = tenant_scope(scope) if Croods.multi_tenancy?
+
+        return scope if action.public
 
         return scope if super?
 
-        return scope unless owner? && scope.has_attribute?(:user_id)
+        return owner_scope(scope) if owner?
 
-        scope.where(user_id: user.id)
+        scope
       end
 
       protected
 
       attr_accessor :tenant, :user, :scope
 
-      def multi_tenancy?
-        return false unless Croods.multi_tenancy?
+      def reflection_path(scope, target, path = [])
+        return path if scope.reflect_on_association(target)
 
-        scope.has_attribute?(Croods.tenant_attribute) ||
-          scope.has_attribute?(:user_id)
+        associations = scope.reflect_on_all_associations(:belongs_to)
+
+        return path if associations.empty?
+
+        associations.each do |association|
+          model = association.class_name.constantize
+          expanded_path = path + [association]
+          association_path = reflection_path(model, target, expanded_path)
+          return association_path if association_path != path
+        end
+
+        path
+      end
+
+      def joins(path)
+        joins = nil
+
+        path.reverse.each do |association|
+          joins = joins ? { association.name => joins } : association.name
+        end
+
+        joins
+      end
+
+      def immediate_tenant_scope(scope)
+        scope.where(Croods.tenant_attribute => tenant.id)
+      end
+
+      def immediate_tenant_scope?(scope)
+        scope.has_attribute?(Croods.tenant_attribute)
       end
 
       def tenant_scope(scope)
-        if scope.has_attribute?(Croods.tenant_attribute)
-          return scope.where(Croods.tenant_attribute => tenant.id)
-        end
+        return immediate_tenant_scope(scope) if immediate_tenant_scope?(scope)
 
-        scope.joins(:user)
-          .where(users: { Croods.tenant_attribute => tenant.id })
+        path = reflection_path(scope, Croods.multi_tenancy_by)
+        return scope if path.empty?
+
+        scope.joins(joins(path)).where(
+          path.last.plural_name => { Croods.tenant_attribute => tenant.id }
+        )
+      end
+
+      def user_owner_scope(scope)
+        scope.where(id: user.id)
+      end
+
+      def user_owner_scope?(scope)
+        scope == User || scope.try(:klass) == User
+      end
+
+      def immediate_owner_scope(scope)
+        scope.where(user_id: user.id)
+      end
+
+      def immediate_owner_scope?(scope)
+        scope.has_attribute?(:user_id)
+      end
+
+      def owner_scope(scope)
+        return user_owner_scope(scope) if user_owner_scope?(scope)
+
+        return immediate_owner_scope(scope) if immediate_owner_scope?(scope)
+
+        path = reflection_path(scope, :user)
+        return scope if path.empty?
+
+        scope.joins(joins(path)).where(
+          path.last.plural_name => { user_id: user.id }
+        )
       end
 
       def super?

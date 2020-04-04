@@ -164,7 +164,7 @@ describe 'POST /organizations', type: :request do
     let(:error) do
       {
         id: 'forbidden',
-        message: 'not allowed to create? this Class'
+        message: 'not allowed to create? this Organization'
       }
     end
 
@@ -181,7 +181,7 @@ describe 'POST /organizations', type: :request do
     let(:error) do
       {
         id: 'forbidden',
-        message: 'not allowed to create? this Class'
+        message: 'not allowed to create? this Organization'
       }
     end
 

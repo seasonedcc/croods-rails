@@ -21,11 +21,36 @@ module Croods
     end
 
     def owner?
-      return true unless member.respond_to? :user_id
+      return true unless member_user
 
       return false unless user
 
-      member.user_id == user.id
+      member_user == user
+    end
+
+    def member_user
+      return @member_user if @member_user
+
+      return if member.instance_of?(Class)
+
+      @member_user = reflection_user(member)
+    end
+
+    def reflection_user(member)
+      return unless member
+
+      return member.user if member.respond_to?(:user)
+
+      associations = member.class.reflect_on_all_associations(:belongs_to)
+
+      return if associations.empty?
+
+      associations.each do |association|
+        association_user = reflection_user(member.public_send(association.name))
+        return association_user if association_user
+      end
+
+      nil
     end
 
     def authorize_action(action)

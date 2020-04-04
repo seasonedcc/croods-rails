@@ -20,13 +20,15 @@ module Croods
 
         def create
           lambda do
-            authorize model
-            render status: :created, json: policy_scope(model)
-              .create!(
-                member_params
-                  .merge(tenant_params(model))
-                  .merge(user_params(model))
-              )
+            member = policy_scope(model).new(
+              member_params
+                .merge(tenant_params(model))
+                .merge(user_params(model))
+            )
+
+            authorize member
+            member.save!
+            render status: :created, json: member
           end
         end
 
