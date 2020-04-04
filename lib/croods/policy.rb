@@ -17,7 +17,9 @@ module Croods
     attr_accessor :user, :member
 
     def admin?
-      user&.admin?
+      return user&.admin? unless Croods.multi_tenancy? && user && member_user
+
+      user&.admin? && member_user.tenant == user.tenant
     end
 
     def owner?
