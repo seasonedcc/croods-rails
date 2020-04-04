@@ -5,16 +5,31 @@ require 'rails_helper'
 describe 'POST /lists', type: :request do
   subject { response }
 
-  let(:project) { current_user.projects.create! name: 'Foo' }
-
   let(:params) { { name: 'Foo Bar', project_id: project.id } }
 
-  let(:another_user) do
+  let(:another_organization) { Organization.create!(name: 'Bar', slug: 'bar') }
+
+  let(:one_user) do
     current_organization.users
-      .create! email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar'
+      .create! email: 'one@another.com', name: 'Foo Bar', password: 'foobar'
   end
 
-  let(:another_project) { another_user.projects.create! name: 'Bar' }
+  let(:another_user) do
+    another_organization.users
+      .create! email: 'another@another.com', name: 'Bar Foo', password: 'barfoo'
+  end
+
+  let(:one_user_project) do
+    one_user.projects.create! name: 'Foo'
+  end
+
+  let(:another_user_project) do
+    another_user.projects.create! name: 'Foo'
+  end
+
+  let(:project) do
+    current_user.projects.create! name: 'Foo'
+  end
 
   context 'with valid params' do
     let(:list) { List.find_by(name: 'Foo Bar') }
@@ -169,8 +184,29 @@ describe 'POST /lists', type: :request do
     it { is_expected.to have_http_status(:created) }
   end
 
+  context 'with a project from another organization' do
+    let(:params) { { name: 'Foo Bar', project_id: another_user_project.id } }
+
+    let(:list) { List.find_by(name: 'Foo Bar') }
+
+    let(:error) do
+      {
+        id: 'forbidden',
+        message: 'not allowed to create? this List'
+      }
+    end
+
+    before do
+      post '/lists', params: params.to_json
+    end
+
+    it { is_expected.to have_http_status(:forbidden) }
+    it { expect(list).to be_nil }
+    it { expect(response.body).to eq_json(error) }
+  end
+
   context 'with a project from another user' do
-    let(:params) { { name: 'Foo Bar', project_id: another_project.id } }
+    let(:params) { { name: 'Foo Bar', project_id: one_user_project.id } }
 
     let(:list) { List.find_by(name: 'Foo Bar') }
 
