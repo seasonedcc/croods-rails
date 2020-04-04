@@ -49,14 +49,17 @@ describe 'GET /tasks', type: :request do
     another_user_list.tasks.create! name: 'Foo'
   end
 
-  let(:task) do
-    list.tasks.create! name: 'Foo'
+  let(:tasks) do
+    list.tasks.order(:sorting)
   end
 
   before do
     one_user_task
     another_user_task
-    task
+    list.tasks.create! name: 'Foo', created_at: 1.day.ago, sorting: 10
+    list.tasks.create! name: 'Foo', created_at: 2.days.ago, sorting: 9
+    list.tasks.create! name: 'Foo', created_at: 3.days.ago, sorting: 8
+    list.tasks.create! name: 'Foo', created_at: 4.days.ago, sorting: nil
   end
 
   context 'with valid request' do
@@ -65,7 +68,7 @@ describe 'GET /tasks', type: :request do
     end
 
     it { is_expected.to have_http_status(:ok) }
-    it { expect(response.body).to eq_json([task]) }
+    it { expect(response.body).to eq_json(tasks) }
   end
 
   context 'with invalid request' do
@@ -103,7 +106,7 @@ describe 'GET /tasks', type: :request do
     end
 
     it { is_expected.to have_http_status(:ok) }
-    it { expect(response.body).to eq_json([task]) }
+    it { expect(response.body).to eq_json(tasks) }
   end
 
   context 'when current user is not admin or supervisor' do
@@ -113,6 +116,6 @@ describe 'GET /tasks', type: :request do
     end
 
     it { is_expected.to have_http_status(:ok) }
-    it { expect(response.body).to eq_json([task]) }
+    it { expect(response.body).to eq_json(tasks) }
   end
 end

@@ -8,7 +8,7 @@ module Croods
           lambda do
             authorize model
             scope = resource.apply_filters(policy_scope(model), params)
-            render json: scope.order(:created_at)
+            render json: scope.order(resource.sort_by)
           end
         end
 
