@@ -11,15 +11,30 @@ module Croods
                 href: resource.collection_path,
                 method: 'GET',
                 rel: 'instances',
-                schema: schema,
+                schema: schema(resource),
                 targetSchema: target_schema(resource)
               }
             end
 
-            def schema
+            def filters(resource)
+              filters = {}
+
+              resource.filters.each do |attribute|
+                filters[attribute.name] = Definition.schema(attribute)
+              end
+
+              filters
+            end
+
+            def required(resource)
+              resource.filters.reject(&:null).map(&:name)
+            end
+
+            def schema(resource)
               {
-                strictProperties: true,
-                properties: {},
+                additionalProperties: false,
+                properties: filters(resource),
+                required: required(resource),
                 type: ['object']
               }
             end

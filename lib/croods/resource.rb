@@ -10,6 +10,7 @@ require_relative 'resource/actions'
 require_relative 'resource/attributes'
 require_relative 'resource/json_schema'
 require_relative 'resource/authentication'
+require_relative 'resource/filters'
 
 module Croods
   module Resource
@@ -26,6 +27,7 @@ module Croods
       include Attributes
       include JsonSchema
       include Authentication
+      include Filters
     end
   end
 end

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'json_schema/definition'
 require_relative 'json_schema/definitions'
 require_relative 'json_schema/properties'
 require_relative 'json_schema/required'

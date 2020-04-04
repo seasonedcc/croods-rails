@@ -61,11 +61,11 @@ describe 'GET /tasks', type: :request do
 
   context 'with valid request' do
     before do
-      get '/tasks'
+      get "/tasks?list_id=#{list.id}"
     end
 
     it { is_expected.to have_http_status(:ok) }
-    it { expect(response.body).to eq_json([one_user_task, task]) }
+    it { expect(response.body).to eq_json([task]) }
   end
 
   context 'with invalid request' do
@@ -79,7 +79,7 @@ describe 'GET /tasks', type: :request do
     end
 
     before do
-      get '/tasks?foo=bar'
+      get "/tasks?list_id=#{list.id}&foo=bar"
     end
 
     it { is_expected.to have_http_status(:bad_request) }
@@ -90,7 +90,7 @@ describe 'GET /tasks', type: :request do
     let(:headers) { { 'access-token' => nil } }
 
     before do
-      get '/tasks', headers: headers
+      get "/tasks?list_id=#{list.id}", headers: headers
     end
 
     it { is_expected.to have_http_status(:unauthorized) }
@@ -99,7 +99,7 @@ describe 'GET /tasks', type: :request do
   context 'when current user is not admin but is a supervisor' do
     before do
       current_user.update! admin: false, supervisor: true
-      get '/tasks'
+      get "/tasks?list_id=#{list.id}"
     end
 
     it { is_expected.to have_http_status(:ok) }
@@ -109,7 +109,7 @@ describe 'GET /tasks', type: :request do
   context 'when current user is not admin or supervisor' do
     before do
       current_user.update! admin: false, supervisor: false
-      get '/tasks'
+      get "/tasks?list_id=#{list.id}"
     end
 
     it { is_expected.to have_http_status(:ok) }

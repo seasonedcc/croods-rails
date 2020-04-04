@@ -2,5 +2,6 @@
 
 module Tasks
   class Resource < ApplicationResource
+    filter_by :list
   end
 end

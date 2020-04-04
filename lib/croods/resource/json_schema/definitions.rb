@@ -15,29 +15,10 @@ module Croods
             attributes = {}
 
             resource.definitions.each_value do |attribute|
-              attributes[attribute.name] = {
-                type: types(attribute)
-              }.merge(format(attribute))
+              attributes[attribute.name] = Definition.schema(attribute)
             end
 
             attributes
-          end
-
-          def format(attribute)
-            return {} unless attribute.type == :datetime
-
-            { format: 'date-time' }
-          end
-
-          def types(attribute)
-            types = []
-            types << type(attribute.type)
-            types << 'null' if attribute.null
-            types
-          end
-
-          def type(type)
-            TYPES[type] || type.to_s
           end
 
           def identity(resource)

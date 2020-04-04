@@ -56,6 +56,24 @@ describe 'GET /lists', type: :request do
     it { expect(response.body).to eq_json([one_user_list, list]) }
   end
 
+  context 'when filtering by a project' do
+    before do
+      get "/lists?project_id=#{project.id}"
+    end
+
+    it { is_expected.to have_http_status(:ok) }
+    it { expect(response.body).to eq_json([list]) }
+  end
+
+  context 'when filtering by another project' do
+    before do
+      get "/lists?project_id=#{one_user_project.id}"
+    end
+
+    it { is_expected.to have_http_status(:ok) }
+    it { expect(response.body).to eq_json([one_user_list]) }
+  end
+
   context 'with invalid request' do
     let(:error) do
       {

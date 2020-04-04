@@ -2,5 +2,6 @@
 
 module Lists
   class Resource < ApplicationResource
+    filter_by :project, optional: true
   end
 end
