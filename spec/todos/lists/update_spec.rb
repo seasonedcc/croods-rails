@@ -227,7 +227,7 @@ describe 'PUT /lists/:id', type: :request do
     end
 
     before do
-      current_user.update! admin: false
+      current_user.update! admin: false, supervisor: false
       put "/lists/#{id}", params: { name: 'Bar Foo' }.to_json
     end
 

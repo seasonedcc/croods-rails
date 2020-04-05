@@ -154,7 +154,7 @@ describe 'DELETE /lists/:id', type: :request do
     end
 
     before do
-      current_user.update! admin: false
+      current_user.update! admin: false, supervisor: false
       delete "/lists/#{id}"
     end
 

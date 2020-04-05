@@ -109,7 +109,7 @@ describe 'GET /lists', type: :request do
     end
 
     it { is_expected.to have_http_status(:ok) }
-    it { expect(response.body).to eq_json([list]) }
+    it { expect(response.body).to eq_json([one_user_list, list]) }
   end
 
   context 'when current user is not admin or supervisor' do

@@ -218,7 +218,7 @@ describe 'POST /lists', type: :request do
     end
 
     before do
-      current_user.update! admin: false
+      current_user.update! admin: false, supervisor: false
       post '/lists', params: params.to_json
     end
 

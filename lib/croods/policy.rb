@@ -16,10 +16,14 @@ module Croods
     cattr_writer :roles
     attr_accessor :user, :member
 
-    def admin?
-      return user&.admin? unless Croods.multi_tenancy? && user && member_user
+    def super?(role)
+      return role?(role) unless Croods.multi_tenancy? && user && member_user
 
-      user&.admin? && member_user.tenant == user.tenant
+      role?(role) && member_user.tenant == user.tenant
+    end
+
+    def role?(role)
+      user&.public_send("#{role}?")
     end
 
     def owner?
@@ -68,12 +72,9 @@ module Croods
     end
 
     def authorize_role(role)
-      name = "#{role}?"
-      return send(name) if respond_to?(name, true)
+      return owner? if role.to_sym == :owner
 
-      return user.send(name) if user.respond_to?(name)
-
-      false
+      super?(role)
     end
   end
 end
