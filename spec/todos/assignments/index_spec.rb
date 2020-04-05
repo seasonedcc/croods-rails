@@ -58,8 +58,24 @@ describe 'GET /assignments', type: :request do
     list.tasks.create! name: 'Foo'
   end
 
-  let(:assignments) do
+  let(:task_assignments) do
     task.assignments.order(:created_at)
+  end
+
+  let(:one_user_task_assignments) do
+    one_user_task.assignments.order(:created_at)
+  end
+
+  let(:one_user_assignments) do
+    one_user.assignments.order(:created_at)
+  end
+
+  let(:current_user_assignments) do
+    current_user.assignments.order(:created_at)
+  end
+
+  let(:organization_assignments) do
+    Assignment.where(task: task).or(Assignment.where(task: one_user_task))
   end
 
   before do
@@ -73,11 +89,47 @@ describe 'GET /assignments', type: :request do
 
   context 'with valid request' do
     before do
+      get '/assignments'
+    end
+
+    it { is_expected.to have_http_status(:ok) }
+    it { expect(response.body).to eq_json(organization_assignments) }
+  end
+
+  context 'when filtering by a task' do
+    before do
       get "/assignments?task_id=#{task.id}"
     end
 
     it { is_expected.to have_http_status(:ok) }
-    it { expect(response.body).to eq_json(assignments) }
+    it { expect(response.body).to eq_json(task_assignments) }
+  end
+
+  context 'when filtering by another task' do
+    before do
+      get "/assignments?task_id=#{one_user_task.id}"
+    end
+
+    it { is_expected.to have_http_status(:ok) }
+    it { expect(response.body).to eq_json(one_user_task_assignments) }
+  end
+
+  context 'when filtering by a user' do
+    before do
+      get "/assignments?user_id=#{current_user.id}"
+    end
+
+    it { is_expected.to have_http_status(:ok) }
+    it { expect(response.body).to eq_json(current_user_assignments) }
+  end
+
+  context 'when filtering by another user' do
+    before do
+      get "/assignments?user_id=#{one_user.id}"
+    end
+
+    it { is_expected.to have_http_status(:ok) }
+    it { expect(response.body).to eq_json(one_user_assignments) }
   end
 
   context 'with invalid request' do
@@ -111,27 +163,37 @@ describe 'GET /assignments', type: :request do
   context 'when current user is not admin but is a supervisor' do
     before do
       current_user.update! admin: false, supervisor: true
-      get "/assignments?task_id=#{task.id}"
+      get '/assignments'
     end
 
     it { is_expected.to have_http_status(:ok) }
-    it { expect(response.body).to eq_json(assignments) }
+    it { expect(response.body).to eq_json(task_assignments) }
   end
 
   context 'when current user is not admin or supervisor' do
     before do
       current_user.update! admin: false, supervisor: false
-      get "/assignments?task_id=#{task.id}"
+      get '/assignments'
     end
 
     it { is_expected.to have_http_status(:ok) }
-    it { expect(response.body).to eq_json(assignments) }
+    it { expect(response.body).to eq_json(task_assignments) }
   end
 
   context 'when task is from another organization' do
     before do
       current_user.update! admin: false
       get "/assignments?task_id=#{another_user_task.id}"
+    end
+
+    it { is_expected.to have_http_status(:ok) }
+    it { expect(response.body).to eq_json([]) }
+  end
+
+  context 'when user is from another organization' do
+    before do
+      current_user.update! admin: false
+      get "/assignments?user_id=#{another_user.id}"
     end
 
     it { is_expected.to have_http_status(:ok) }
