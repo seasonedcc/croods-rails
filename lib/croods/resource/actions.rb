@@ -12,12 +12,30 @@ module Croods
       end
 
       def actions(*names)
-        return @actions ||= default_actions if names.empty?
+        return filtered_actions if names.empty?
 
         @actions = names.map do |name|
           Croods::Action.new name
         end
       end
+
+      def filtered_actions
+        @actions ||= default_actions
+
+        @actions.reject { |action| ignored_actions.include?(action.name) }
+      end
+
+      def remove_actions(*names)
+        names.each do |name|
+          ignored_actions << name.to_sym
+        end
+      end
+
+      def ignored_actions
+        @ignored_actions ||= []
+      end
+
+      alias remove_action remove_actions
     end
   end
 end

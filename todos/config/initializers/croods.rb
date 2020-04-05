@@ -6,5 +6,6 @@ Croods.initialize_for(
   :projects,
   :lists,
   :tasks,
+  :assignments,
   multi_tenancy_by: :organization
 )

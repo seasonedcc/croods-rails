@@ -10,10 +10,18 @@ module ActionDispatch
           resource.create_model!
           resource.create_policy!
           resource.create_controller!
-          resources resource.route_name, param: resource.identifier
+          create_resource_routes!(resource)
         end
 
         Croods.json_schema = Croods::Api.json_schema
+      end
+
+      def create_resource_routes!(resource)
+        resources(
+          resource.route_name,
+          param: resource.identifier,
+          only: resource.actions.map(&:name)
+        )
       end
 
       def create_application_controller!
