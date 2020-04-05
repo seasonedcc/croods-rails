@@ -12,7 +12,8 @@ module Croods
       protected
 
       def user_params(model)
-        return {} unless model.has_attribute? :user_id
+        return {} unless resource.user_is_the_owner?
+        return {} unless model.has_attribute?(:user_id)
 
         { user_id: current_user&.id }
       end

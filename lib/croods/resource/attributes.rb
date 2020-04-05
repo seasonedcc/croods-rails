@@ -18,7 +18,7 @@ module Croods
       end
 
       def request_instance
-        @request_instance ||= Request.new
+        @request_instance ||= Request.new(ignore_user: user_is_the_owner?)
       end
 
       def response_instance

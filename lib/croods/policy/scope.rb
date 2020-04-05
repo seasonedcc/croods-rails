@@ -25,8 +25,15 @@ module Croods
 
       attr_accessor :tenant, :user, :scope
 
+      def scope_is_the_owner?(scope, target)
+        return scope.reflect_on_association(target) unless target == :user
+
+        scope.resource.user_is_the_owner? &&
+          scope.reflect_on_association(target)
+      end
+
       def reflection_path(scope, target, path = [])
-        return path if scope.reflect_on_association(target)
+        return path if scope_is_the_owner?(scope, target)
 
         associations = scope.reflect_on_all_associations(:belongs_to)
 
@@ -84,7 +91,7 @@ module Croods
       end
 
       def immediate_owner_scope?(scope)
-        scope.has_attribute?(:user_id)
+        scope.resource.user_is_the_owner? && scope.has_attribute?(:user_id)
       end
 
       def owner_scope(scope)

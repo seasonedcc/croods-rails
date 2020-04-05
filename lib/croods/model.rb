@@ -4,6 +4,14 @@ module Croods
   class Model < ActiveRecord::Base
     self.abstract_class = true
 
+    def self.resource_name
+      to_s.pluralize
+    end
+
+    def self.resource
+      "#{resource_name}::Resource".constantize
+    end
+
     def as_json(_options = {})
       attributes = {}
 
