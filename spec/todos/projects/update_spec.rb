@@ -51,7 +51,7 @@ describe 'PUT /projects/:id', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/project/links/2/schema: "foo" is not a permitted key.'
+          '#/definitions/project/links/3/schema: "foo" is not a permitted key.'
       }
     end
 
@@ -70,7 +70,7 @@ describe 'PUT /projects/:id', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/project/links/2/schema: "id" is not a ' \
+          '#/definitions/project/links/3/schema: "id" is not a ' \
           'permitted key.'
       }
     end
@@ -95,7 +95,7 @@ describe 'PUT /projects/:id', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/project/links/2/schema: "created_at" is not a ' \
+          '#/definitions/project/links/3/schema: "created_at" is not a ' \
           'permitted key.'
       }
     end
@@ -120,7 +120,7 @@ describe 'PUT /projects/:id', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/project/links/2/schema: "updated_at" is not a ' \
+          '#/definitions/project/links/3/schema: "updated_at" is not a ' \
           'permitted key.'
       }
     end

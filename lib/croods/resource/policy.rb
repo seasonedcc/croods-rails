@@ -36,7 +36,7 @@ module Croods
       end
 
       def create_policy_actions!
-        actions.each do |action|
+        (actions + additional_actions).each do |action|
           policy.define_method("#{action.name}?") { authorize_action(action) }
 
           Object.const_set(

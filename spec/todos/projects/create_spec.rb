@@ -27,7 +27,7 @@ describe 'POST /projects', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/project/links/1/schema: "foo" is not a permitted key.'
+          '#/definitions/project/links/2/schema: "foo" is not a permitted key.'
       }
     end
 
@@ -48,7 +48,7 @@ describe 'POST /projects', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/project/links/1/schema: "id" is not a ' \
+          '#/definitions/project/links/2/schema: "id" is not a ' \
           'permitted key.'
       }
     end
@@ -73,7 +73,7 @@ describe 'POST /projects', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/project/links/1/schema: "created_at" is not a ' \
+          '#/definitions/project/links/2/schema: "created_at" is not a ' \
           'permitted key.'
       }
     end
@@ -98,7 +98,7 @@ describe 'POST /projects', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/project/links/1/schema: "updated_at" is not a ' \
+          '#/definitions/project/links/2/schema: "updated_at" is not a ' \
           'permitted key.'
       }
     end
@@ -118,7 +118,7 @@ describe 'POST /projects', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/project/links/1/schema: "name" wasn\'t supplied.'
+          '#/definitions/project/links/2/schema: "name" wasn\'t supplied.'
       }
     end
 

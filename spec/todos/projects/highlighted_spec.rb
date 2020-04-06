@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe 'GET /projects', type: :request do
+describe 'GET /projects/highlighted', type: :request do
   subject { response }
 
   let(:another_organization) { Organization.create!(name: 'Bar', slug: 'bar') }
@@ -26,7 +26,7 @@ describe 'GET /projects', type: :request do
   end
 
   let(:project) do
-    current_user.projects.create! name: 'Foo'
+    current_user.projects.create! name: 'Foo', highlighted: true
   end
 
   before do
@@ -37,11 +37,11 @@ describe 'GET /projects', type: :request do
 
   context 'with valid request' do
     before do
-      get '/projects'
+      get '/projects/highlighted'
     end
 
     it { is_expected.to have_http_status(:ok) }
-    it { expect(response.body).to eq_json([one_user_project, project]) }
+    it { expect(response.body).to eq_json([project]) }
   end
 
   context 'with invalid request' do
@@ -49,13 +49,13 @@ describe 'GET /projects', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/project/links/1/schema: "foo" is not a ' \
+          '#/definitions/project/links/0/schema: "foo" is not a ' \
           'permitted key.'
       }
     end
 
     before do
-      get '/projects?foo=bar'
+      get '/projects/highlighted?foo=bar'
     end
 
     it { is_expected.to have_http_status(:bad_request) }
@@ -66,7 +66,7 @@ describe 'GET /projects', type: :request do
     let(:headers) { { 'access-token' => nil } }
 
     before do
-      get '/projects', headers: headers
+      get '/projects/highlighted', headers: headers
     end
 
     it { is_expected.to have_http_status(:unauthorized) }
@@ -75,7 +75,7 @@ describe 'GET /projects', type: :request do
   context 'when current user is not admin but is a supervisor' do
     before do
       current_user.update! admin: false, supervisor: true
-      get '/projects'
+      get '/projects/highlighted'
     end
 
     it { is_expected.to have_http_status(:ok) }
@@ -85,7 +85,7 @@ describe 'GET /projects', type: :request do
   context 'when current user is not admin or supervisor' do
     before do
       current_user.update! admin: false, supervisor: false
-      get '/projects'
+      get '/projects/highlighted'
     end
 
     it { is_expected.to have_http_status(:ok) }

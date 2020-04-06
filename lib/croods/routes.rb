@@ -21,7 +21,11 @@ module ActionDispatch
           resource.route_name,
           param: resource.identifier,
           only: resource.actions.map(&:name)
-        )
+        ) do
+          resource.additional_actions.each do |action|
+            public_send(action.method, action.name, on: action.on)
+          end
+        end
       end
 
       def create_application_controller!

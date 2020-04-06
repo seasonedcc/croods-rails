@@ -28,10 +28,21 @@ module Croods
           controller.instance_eval(&block)
         end
 
+        create_actions!
+        create_additional_actions!
+      end
+
+      def create_actions!
         actions.each do |action|
           controller.define_method(
             action.name, Croods::Controller::Actions.send(action.name)
           )
+        end
+      end
+
+      def create_additional_actions!
+        additional_actions.each do |action|
+          controller.define_method(action.name, &action.block)
         end
       end
     end

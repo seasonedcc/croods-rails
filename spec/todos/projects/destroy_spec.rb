@@ -50,7 +50,7 @@ describe 'DELETE /projects/:id', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/project/links/3/schema: "foo" is not a ' \
+          '#/definitions/project/links/4/schema: "foo" is not a ' \
           'permitted key.'
       }
     end

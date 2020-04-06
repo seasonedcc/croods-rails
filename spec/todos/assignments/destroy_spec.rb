@@ -86,7 +86,7 @@ describe 'DELETE /assignments/:id', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/assignment/links/3/schema: "foo" is not a ' \
+          '#/definitions/assignment/links/2/schema: "foo" is not a ' \
           'permitted key.'
       }
     end

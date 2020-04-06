@@ -7,8 +7,7 @@ module Croods
         def index
           lambda do
             authorize model
-            scope = resource.apply_filters(policy_scope(model), params)
-            render json: scope.order(resource.sort_by)
+            render json: collection
           end
         end
 
