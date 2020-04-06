@@ -23,12 +23,12 @@ module Croods
             member = new_member
 
             authorize member
-            member = execute_service(member, member_params) do
+            json = execute_service(member, member_params) do
               member.save!
               member
             end
 
-            render status: :created, json: member
+            render status: :created, json: json
           end
         end
 
@@ -43,7 +43,11 @@ module Croods
         def destroy
           lambda do
             authorize member
-            render json: member.destroy!
+            json = execute_service(member, params) do
+              member.destroy!
+            end
+
+            render json: json
           end
         end
       end

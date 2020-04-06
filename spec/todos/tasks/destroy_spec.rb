@@ -38,7 +38,7 @@ describe 'DELETE /tasks/:id', type: :request do
   end
 
   let(:list) do
-    project.lists.create! name: 'Foo'
+    project.lists.create! name: 'Foo', total_tasks: 25
   end
 
   let(:one_user_task) do
@@ -60,6 +60,9 @@ describe 'DELETE /tasks/:id', type: :request do
   end
 
   context 'with valid request' do
+    let(:reloaded_list) { list.reload }
+    let(:status_text) { 'Current User just deleted a task.' }
+
     before do
       delete "/tasks/#{task.id}"
     end
@@ -67,6 +70,8 @@ describe 'DELETE /tasks/:id', type: :request do
     it { is_expected.to have_http_status(:ok) }
     it { expect(response.body).to eq_json(task) }
     it { expect(list.tasks.find_by(name: 'Foo')).to be_nil }
+    it { expect(reloaded_list.total_tasks).to eq(24) }
+    it { expect(reloaded_list.status_text).to eq(status_text) }
   end
 
   context 'with invalid request' do

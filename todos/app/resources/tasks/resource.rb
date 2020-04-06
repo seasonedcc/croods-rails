@@ -16,5 +16,6 @@ module Tasks
     end
 
     use_service Create
+    use_service Destroy
   end
 end
