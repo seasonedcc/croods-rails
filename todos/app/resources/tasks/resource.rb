@@ -11,10 +11,9 @@ module Tasks
 
     add_action :finish, method: :put do
       authorize member
-      member.update!(finished: true)
-      render json: member
+      render json: Finish.execute(member, current_user)
     end
 
-    use_services Create, Destroy, Index
+    use_services Create, Destroy, Index, Show, Update
   end
 end

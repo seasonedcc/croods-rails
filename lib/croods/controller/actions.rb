@@ -19,7 +19,12 @@ module Croods
         def show
           lambda do
             authorize member
-            render json: member
+
+            json = execute_service(member, params) do
+              member
+            end
+
+            render json: json
           end
         end
 
@@ -40,8 +45,13 @@ module Croods
         def update
           lambda do
             authorize member
-            member.update!(member_params)
-            render json: member
+
+            json = execute_service(member, member_params) do
+              member.update!(member_params)
+              member
+            end
+
+            render json: json
           end
         end
 

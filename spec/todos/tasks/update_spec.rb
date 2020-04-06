@@ -60,12 +60,15 @@ describe 'PUT /tasks/:id', type: :request do
   end
 
   context 'with valid params' do
+    let(:status_text) { 'Current User just updated a task.' }
+
     before do
       put "/tasks/#{task.id}", params: { name: 'Bar Foo' }.to_json
     end
 
     it { is_expected.to have_http_status(:ok) }
     it { expect(response.body).to eq_json(task.reload) }
+    it { expect(list.reload.status_text).to eq(status_text) }
   end
 
   context 'with invalid param' do

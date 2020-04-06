@@ -38,7 +38,7 @@ describe 'PUT /tasks/:id/finish', type: :request do
   end
 
   let(:list) do
-    project.lists.create! name: 'Foo'
+    project.lists.create! name: 'Foo', total_tasks: 5
   end
 
   let(:one_user_task) do
@@ -60,12 +60,19 @@ describe 'PUT /tasks/:id/finish', type: :request do
   end
 
   context 'with valid params' do
+    let(:reloaded_list) { list.reload }
+    let(:status_text) { 'Current User just finished a task.' }
+
     before do
       put "/tasks/#{task.id}/finish"
     end
 
     it { is_expected.to have_http_status(:ok) }
     it { expect(response.body).to eq_json(task.reload) }
+    it { expect(reloaded_list.total_tasks).to eq(5) }
+    it { expect(reloaded_list.finished_tasks).to eq(1) }
+    it { expect(reloaded_list.progress).to eq(20) }
+    it { expect(reloaded_list.status_text).to eq(status_text) }
   end
 
   context 'with invalid param' do

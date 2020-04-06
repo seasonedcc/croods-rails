@@ -62,12 +62,15 @@ describe 'GET /tasks/:id', type: :request do
   end
 
   context 'with valid request' do
+    let(:status_text) { 'Current User just saw a task.' }
+
     before do
       get "/tasks/#{id}"
     end
 
     it { is_expected.to have_http_status(:ok) }
     it { expect(response.body).to eq_json(task) }
+    it { expect(list.reload.status_text).to eq(status_text) }
   end
 
   context 'with invalid request' do
