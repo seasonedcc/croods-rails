@@ -7,7 +7,12 @@ module Croods
         def index
           lambda do
             authorize model
-            render json: collection
+
+            json = execute_service(collection, params) do
+              collection
+            end
+
+            render json: json
           end
         end
 

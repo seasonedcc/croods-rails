@@ -15,7 +15,6 @@ module Tasks
       render json: member
     end
 
-    use_service Create
-    use_service Destroy
+    use_services Create, Destroy, Index
   end
 end
