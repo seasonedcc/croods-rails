@@ -14,5 +14,7 @@ module Tasks
       member.update!(finished: true)
       render json: member
     end
+
+    use_service Create
   end
 end

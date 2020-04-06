@@ -32,6 +32,14 @@ module Croods
               .permit(resource.request_attributes.keys)
           )
       end
+
+      def new_member
+        policy_scope(model).new(
+          member_params
+            .merge(tenant_params(model))
+            .merge(user_params(model))
+        )
+      end
     end
   end
 end

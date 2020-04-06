@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_06_184927) do
+ActiveRecord::Schema.define(version: 2020_04_06_193027) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,10 +55,14 @@ ActiveRecord::Schema.define(version: 2020_04_06_184927) do
   end
 
   create_table "lists", force: :cascade do |t|
-    t.bigint   "project_id", :null=>false, :foreign_key=>{:references=>"projects", :name=>"fk_lists_project_id", :on_update=>:no_action, :on_delete=>:no_action}, :index=>{:name=>"fk__lists_project_id"}
-    t.string   "name",       :null=>false
-    t.datetime "created_at", :null=>false
-    t.datetime "updated_at", :null=>false
+    t.bigint   "project_id",     :null=>false, :foreign_key=>{:references=>"projects", :name=>"fk_lists_project_id", :on_update=>:no_action, :on_delete=>:no_action}, :index=>{:name=>"fk__lists_project_id"}
+    t.string   "name",           :null=>false
+    t.datetime "created_at",     :null=>false
+    t.datetime "updated_at",     :null=>false
+    t.integer  "total_tasks",    :default=>0, :null=>false
+    t.integer  "finished_tasks", :default=>0, :null=>false
+    t.integer  "progress",       :default=>0, :null=>false
+    t.string   "status_text"
   end
 
   create_table "tasks", force: :cascade do |t|

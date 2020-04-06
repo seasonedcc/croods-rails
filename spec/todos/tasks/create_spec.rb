@@ -45,6 +45,8 @@ describe 'POST /tasks', type: :request do
 
   context 'with valid params' do
     let(:task) { Task.find_by(name: 'Foo Bar') }
+    let(:reloaded_list) { list.reload }
+    let(:status_text) { 'Current User just created a task.' }
 
     before do
       post '/tasks', params: params.to_json
@@ -52,6 +54,8 @@ describe 'POST /tasks', type: :request do
 
     it { is_expected.to have_http_status(:created) }
     it { expect(response.body).to eq_json(task) }
+    it { expect(reloaded_list.total_tasks).to eq(1) }
+    it { expect(reloaded_list.status_text).to eq(status_text) }
   end
 
   context 'with invalid param' do

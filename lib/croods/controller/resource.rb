@@ -12,6 +12,18 @@ module Croods
       def resource
         "#{resource_name}::Resource".constantize
       end
+
+      def action
+        @action ||= resource.actions.find do |action|
+          action.name.to_s == action_name
+        end
+      end
+
+      def execute_service(member_or_collection, params, &block)
+        return instance_eval(&block) unless action&.service
+
+        action.service.execute(member_or_collection, params, current_user)
+      end
     end
   end
 end

@@ -13,6 +13,7 @@ require_relative 'resource/authentication'
 require_relative 'resource/authorization'
 require_relative 'resource/filters'
 require_relative 'resource/sorting'
+require_relative 'resource/services'
 
 module Croods
   module Resource
@@ -32,6 +33,7 @@ module Croods
       include Authorization
       include Filters
       include Sorting
+      include Services
     end
   end
 end
