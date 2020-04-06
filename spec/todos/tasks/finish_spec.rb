@@ -2,10 +2,8 @@
 
 require 'rails_helper'
 
-describe 'GET /tasks/:id', type: :request do
+describe 'PUT /tasks/:id/finish', type: :request do
   subject { response }
-
-  let(:id) { task.id }
 
   let(:another_organization) { Organization.create!(name: 'Bar', slug: 'bar') }
 
@@ -61,27 +59,28 @@ describe 'GET /tasks/:id', type: :request do
     task
   end
 
-  context 'with valid request' do
+  context 'with valid params' do
     before do
-      get "/tasks/#{id}"
+      put "/tasks/#{task.id}/finish"
     end
 
     it { is_expected.to have_http_status(:ok) }
-    it { expect(response.body).to eq_json(task) }
+    it { expect(response.body).to eq_json(task.reload) }
   end
 
-  context 'with invalid request' do
+  context 'with invalid param' do
+    let(:params) { { foo: 'bar' } }
+
     let(:error) do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/task/links/5/schema: "foo" is not a ' \
-          'permitted key.'
+          '#/definitions/task/links/0/schema: "foo" is not a permitted key.'
       }
     end
 
     before do
-      get "/tasks/#{id}?foo=bar"
+      put "/tasks/#{task.id}/finish", params: params.to_json
     end
 
     it { is_expected.to have_http_status(:bad_request) }
@@ -100,7 +99,7 @@ describe 'GET /tasks/:id', type: :request do
     end
 
     before do
-      get "/tasks/#{id}"
+      put "/tasks/#{id}/finish"
     end
 
     it { is_expected.to have_http_status(:not_found) }
@@ -111,7 +110,7 @@ describe 'GET /tasks/:id', type: :request do
     let(:headers) { { 'access-token' => nil } }
 
     before do
-      get "/tasks/#{id}", headers: headers
+      put "/tasks/#{task.id}/finish", headers: headers
     end
 
     it { is_expected.to have_http_status(:unauthorized) }
@@ -120,7 +119,7 @@ describe 'GET /tasks/:id', type: :request do
   context 'when current user is not admin but is a supervisor' do
     before do
       current_user.update! admin: false, supervisor: true
-      get "/tasks/#{id}"
+      put "/tasks/#{task.id}/finish"
     end
 
     it { is_expected.to have_http_status(:ok) }
@@ -129,7 +128,7 @@ describe 'GET /tasks/:id', type: :request do
   context 'when current user is not admin or supervisor' do
     before do
       current_user.update! admin: false, supervisor: false
-      get "/tasks/#{id}"
+      put "/tasks/#{task.id}/finish"
     end
 
     it { is_expected.to have_http_status(:ok) }
@@ -147,14 +146,14 @@ describe 'GET /tasks/:id', type: :request do
     end
 
     before do
-      get "/tasks/#{id}"
+      put "/tasks/#{id}/finish"
     end
 
     it { is_expected.to have_http_status(:not_found) }
     it { expect(response.body).to eq_json(error) }
   end
 
-  context 'when tasl is from another user from the same organization' do
+  context 'when task is from another user in the same organization' do
     let(:id) { one_user_task.id }
 
     let(:error) do
@@ -167,7 +166,7 @@ describe 'GET /tasks/:id', type: :request do
 
     before do
       current_user.update! admin: false
-      get "/tasks/#{id}"
+      put "/tasks/#{id}/finish"
     end
 
     it { is_expected.to have_http_status(:not_found) }

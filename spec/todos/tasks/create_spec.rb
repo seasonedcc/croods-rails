@@ -63,7 +63,7 @@ describe 'POST /tasks', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/task/links/1/schema: "foo" is not a permitted key.'
+          '#/definitions/task/links/2/schema: "foo" is not a permitted key.'
       }
     end
 
@@ -84,7 +84,7 @@ describe 'POST /tasks', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/task/links/1/schema: "id" is not a ' \
+          '#/definitions/task/links/2/schema: "id" is not a ' \
           'permitted key.'
       }
     end
@@ -110,7 +110,7 @@ describe 'POST /tasks', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/task/links/1/schema: "created_at" is not a ' \
+          '#/definitions/task/links/2/schema: "created_at" is not a ' \
           'permitted key.'
       }
     end
@@ -136,7 +136,29 @@ describe 'POST /tasks', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/task/links/1/schema: "updated_at" is not a ' \
+          '#/definitions/task/links/2/schema: "updated_at" is not a ' \
+          'permitted key.'
+      }
+    end
+
+    before do
+      post '/tasks', params: params.to_json
+    end
+
+    it { is_expected.to have_http_status(:bad_request) }
+    it { expect(response.body).to eq_json(error) }
+  end
+
+  context 'with finished param' do
+    let(:params) do
+      { name: 'Foo Bar', list_id: list.id, finished: true }
+    end
+
+    let(:error) do
+      {
+        id: 'bad_request',
+        message: "Invalid request.\n\n#: failed schema " \
+          '#/definitions/task/links/2/schema: "finished" is not a ' \
           'permitted key.'
       }
     end
@@ -156,7 +178,7 @@ describe 'POST /tasks', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/task/links/1/schema: "name" wasn\'t supplied.'
+          '#/definitions/task/links/2/schema: "name" wasn\'t supplied.'
       }
     end
 

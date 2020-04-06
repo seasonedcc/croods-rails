@@ -75,7 +75,7 @@ describe 'PUT /tasks/:id', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/task/links/2/schema: "foo" is not a permitted key.'
+          '#/definitions/task/links/3/schema: "foo" is not a permitted key.'
       }
     end
 
@@ -94,7 +94,7 @@ describe 'PUT /tasks/:id', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/task/links/2/schema: "id" is not a ' \
+          '#/definitions/task/links/3/schema: "id" is not a ' \
           'permitted key.'
       }
     end
@@ -119,7 +119,7 @@ describe 'PUT /tasks/:id', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/task/links/2/schema: "created_at" is not a ' \
+          '#/definitions/task/links/3/schema: "created_at" is not a ' \
           'permitted key.'
       }
     end
@@ -144,7 +144,27 @@ describe 'PUT /tasks/:id', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/task/links/2/schema: "updated_at" is not a ' \
+          '#/definitions/task/links/3/schema: "updated_at" is not a ' \
+          'permitted key.'
+      }
+    end
+
+    before do
+      put "/tasks/#{task.id}", params: params.to_json
+    end
+
+    it { is_expected.to have_http_status(:bad_request) }
+    it { expect(response.body).to eq_json(error) }
+  end
+
+  context 'with finished param' do
+    let(:params) { { name: 'Foo', finished: true } }
+
+    let(:error) do
+      {
+        id: 'bad_request',
+        message: "Invalid request.\n\n#: failed schema " \
+          '#/definitions/task/links/3/schema: "finished" is not a ' \
           'permitted key.'
       }
     end

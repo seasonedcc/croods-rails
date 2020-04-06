@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'links/collection'
+require_relative 'links/member'
 require_relative 'links/index'
 require_relative 'links/create'
 require_relative 'links/update'

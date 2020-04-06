@@ -76,7 +76,7 @@ describe 'GET /tasks', type: :request do
       {
         id: 'bad_request',
         message: "Invalid request.\n\n#: failed schema " \
-          '#/definitions/task/links/0/schema: "foo" is not a ' \
+          '#/definitions/task/links/1/schema: "foo" is not a ' \
           'permitted key.'
       }
     end
