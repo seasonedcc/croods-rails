@@ -3,9 +3,9 @@
 module Croods
   module Resource
     module Filters
-      def filter_by(association, **options)
+      def filter_by(association, optional: nil)
         filters << Croods::Attribute.new(
-          "#{association}_id", :string, null: options[:optional]
+          "#{association}_id", :string, null: optional
         )
       end
 

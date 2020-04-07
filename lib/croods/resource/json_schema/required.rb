@@ -5,14 +5,14 @@ module Croods
     module JsonSchema
       module Required
         class << self
-          def schema(resource, **options)
+          def schema(resource, request: false)
             required = []
 
             properties = resource.response_attributes
-            properties = resource.request_attributes if options[:request]
+            properties = resource.request_attributes if request
 
             properties.each_value do |attribute|
-              next if ignore?(options, attribute)
+              next if ignore?(request, attribute)
 
               required << attribute.name unless attribute.null
             end
@@ -20,8 +20,8 @@ module Croods
             required
           end
 
-          def ignore?(options, attribute)
-            return unless options[:request]
+          def ignore?(request, attribute)
+            return unless request
 
             return true if attribute.default || attribute.default_function
 
