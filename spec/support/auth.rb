@@ -55,7 +55,7 @@ module JsonRequests
     }
   end
 
-  def json_args(path, options = {})
+  def json_args(path, **options)
     auth_headers = current_user.create_new_auth_token
     [
       path,

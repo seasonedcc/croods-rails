@@ -5,7 +5,7 @@ module Croods
     class Base
       attr_accessor :app, :options
 
-      def initialize(app, options = {})
+      def initialize(app, **options)
         self.app = app
         self.options = options
       end
