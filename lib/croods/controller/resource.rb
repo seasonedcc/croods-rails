@@ -6,7 +6,8 @@ module Croods
       protected
 
       def resource_name
-        self.class.to_s.titleize.split.first
+        *names, _last = self.class.to_s.titleize.split
+        names.join
       end
 
       def resource

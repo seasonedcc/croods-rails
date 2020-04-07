@@ -12,10 +12,14 @@ module Croods
       protected
 
       def tenant_model
+        return unless Croods.multi_tenancy?
+
         Croods.multi_tenancy_by.to_s.titleize.constantize
       end
 
       def header_tenant
+        return unless Croods.multi_tenancy?
+
         tenant_model.find_by!(slug: request.headers['Tenant'])
       end
 

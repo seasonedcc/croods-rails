@@ -12,6 +12,8 @@ module Croods
         allow_password_change confirmation_sent_at confirmation_token
         encrypted_password confirmed_at provider uid remember_created_at
         reset_password_sent_at reset_password_token tokens unconfirmed_email
+        current_sign_in_at current_sign_in_ip last_sign_in_at last_sign_in_ip
+        sign_in_count
       ].freeze
 
       def use_for_authentication!(*options)

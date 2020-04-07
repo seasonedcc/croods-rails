@@ -15,7 +15,7 @@ module Croods
         end
       end
 
-      def public(*names)
+      def public_actions(*names)
         return unless names
 
         names = [names] if names&.is_a?(Symbol)
@@ -30,6 +30,8 @@ module Croods
           action.public = true
         end
       end
+
+      alias public_action public_actions
 
       def user_is_not_the_owner!
         @user_is_the_owner = false

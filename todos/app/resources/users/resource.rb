@@ -6,6 +6,6 @@ module Users
     authorize :admin, on: :destroy
     authorize :admin, :supervisor, on: %i[create update]
 
-    public :index, :show
+    public_actions :index, :show
   end
 end

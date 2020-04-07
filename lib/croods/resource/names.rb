@@ -8,7 +8,7 @@ module Croods
       end
 
       def route_name
-        namespace.downcase
+        namespace.underscore
       end
 
       def model_name
@@ -16,7 +16,7 @@ module Croods
       end
 
       def resource_name
-        model_name.downcase
+        model_name.underscore
       end
     end
   end
