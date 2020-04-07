@@ -36,6 +36,10 @@ module ActionDispatch
         Object.const_set(
           'ApplicationController', Class.new(Croods::Controller)
         )
+
+        Croods.application_controller_blocks.each do |block|
+          ApplicationController.instance_eval(&block)
+        end
       end
     end
   end

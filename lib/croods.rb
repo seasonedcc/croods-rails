@@ -32,6 +32,16 @@ module Croods
     def tenant_attribute
       "#{Croods.multi_tenancy_by}_id".to_sym
     end
+
+    def application_controller(&block)
+      return unless block
+
+      application_controller_blocks << block
+    end
+
+    def application_controller_blocks
+      @application_controller_blocks ||= []
+    end
   end
 end
 
