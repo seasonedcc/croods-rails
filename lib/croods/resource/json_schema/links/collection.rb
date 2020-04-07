@@ -23,10 +23,22 @@ module Croods
               filters = {}
 
               resource.filters.each do |attribute|
-                filters[attribute.name] = Definition.schema(attribute)
+                unless resource.model.has_attribute?(attribute.name)
+                  attribute.name = "#{attribute.name}_id"
+                end
+
+                filters[attribute.name] = definition(attribute)
               end
 
               filters
+            end
+
+            def definition(attribute)
+              definition = Definition.schema(attribute)
+
+              {
+                anyOf: [{ type: ['array'], items: definition }, definition]
+              }
             end
 
             def required(resource)
