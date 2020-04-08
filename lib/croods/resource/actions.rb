@@ -35,7 +35,7 @@ module Croods
         @additional_actions ||= []
       end
 
-      def remove_actions(*names)
+      def ignore_actions(*names)
         names.each do |name|
           ignored_actions << name.to_sym
         end
@@ -45,7 +45,7 @@ module Croods
         @ignored_actions ||= []
       end
 
-      alias remove_action remove_actions
+      alias ignore_action ignore_actions
     end
   end
 end
