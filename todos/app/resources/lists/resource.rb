@@ -7,7 +7,7 @@ module Lists
     authorize :owner, :admin, :supervisor
 
     request do
-      remove_attributes :total_tasks, :finished_tasks, :progress, :status_text
+      ignore_attributes :total_tasks, :finished_tasks, :progress, :status_text
     end
   end
 end
