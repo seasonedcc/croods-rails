@@ -6,7 +6,7 @@ module Tasks
     sort_by :sorting
 
     request do
-      remove_attribute :finished
+      skip_attribute :finished
     end
 
     add_action :finish, method: :put do

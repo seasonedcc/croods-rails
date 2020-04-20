@@ -19,8 +19,8 @@ module Croods
       def use_for_authentication!(*options)
         add_model_authentication(*options)
 
-        remove_attributes(*ATTRIBUTES)
-        remove_attribute(Croods.tenant_attribute) if Croods.multi_tenancy?
+        skip_attributes(*ATTRIBUTES)
+        skip_attribute(Croods.tenant_attribute) if Croods.multi_tenancy?
 
         request do
           add_attribute :password, :string, null: false

@@ -13,7 +13,7 @@ module Croods
           @additional_attributes ||= {}
         end
 
-        def remove_attributes(*names)
+        def skip_attributes(*names)
           names.each do |name|
             ignored_attributes << name.to_s
           end
@@ -23,7 +23,7 @@ module Croods
           @ignored_attributes ||= []
         end
 
-        alias remove_attribute remove_attributes
+        alias skip_attribute skip_attributes
       end
     end
   end
