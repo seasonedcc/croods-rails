@@ -3,3 +3,4 @@ log/*.log
 pkg/
 todos/log/*.log
 todos/tmp/
+.gems/
