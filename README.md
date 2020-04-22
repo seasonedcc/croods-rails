@@ -1,3 +1,7 @@
+[![CircleCI](https://circleci.com/gh/SeasonedSoftware/croods-rails.svg?style=svg)](https://circleci.com/gh/SeasonedSoftware/croods-rails)
+[![Maintainability](https://api.codeclimate.com/v1/badges/5531c26549b427684578/maintainability)](https://codeclimate.com/github/SeasonedSoftware/croods-rails/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/5531c26549b427684578/test_coverage)](https://codeclimate.com/github/SeasonedSoftware/croods-rails/test_coverage)
+
 # Croods
 Short description and motivation.
 
