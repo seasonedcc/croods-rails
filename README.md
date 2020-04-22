@@ -21,16 +21,19 @@ Or install it yourself as:
 $ gem install croods
 ```
 
-## Contributing
-There's a ~not so~ dummy Rails app in `/todos` directory.
 
-You can use it to test your changes.
+## Contributing
+
+You can manually check your changes in the dummy Rails app under `/todos`.
 
 To set it up:
 ```
 cd todos/
 bin/setup
 ```
+
+To run specs use:
+```bin/rspec```
 
 ## License
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
