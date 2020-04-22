@@ -33,6 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'pg'
   spec.add_development_dependency 'rack-cors', '1.1.1'
   spec.add_development_dependency 'rspec-rails', '~> 4.0.0.rc1'
+  spec.add_development_dependency 'rspec_junit_formatter', '~> 0.4.1'
   spec.add_development_dependency 'rubocop', '0.80.1'
   spec.add_development_dependency 'rubocop-rspec', '1.38.1'
   spec.add_development_dependency 'simplecov', '~> 0.17.0'
