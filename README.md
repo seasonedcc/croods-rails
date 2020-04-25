@@ -6,8 +6,19 @@
 Short description and motivation.
 
 ## Usage
-How to use my plugin.
 
+### Authentication
+Croods uses [devise_token_auth](https://github.com/lynndylanhurley/devise_token_auth) under the hood.
+To customize which devise modules are loaded, you can pass them as arguments to `use_for_authentication!`
+```
+use_for_authentication!(
+  :database_authenticatable,
+  :recoverable,
+  :rememberable,
+  :trackable,
+  :validatable
+)
+```
 ## Installation
 Add this line to your application's Gemfile:
 
