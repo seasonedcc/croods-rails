@@ -6,6 +6,56 @@
 Short description and motivation.
 
 ## Usage
+### Resource
+Resource is a generic abstraction for any object your app needs to represent. Instead of `app/models/` and `app/controllers/`, with croods we have `app/resources/`.
+
+### Creating a resource
+To add a `Project` resource to your app, start by generating a migration:
+```rails g migration CreateProjects```
+
+``` ruby
+# It's crucial to write really solid migrations
+# croods will use your database schema to build your resources.
+class CreateProjects < ActiveRecord::Migration[5.2]
+  def change
+    create_table :projects do |t|
+      t.string :name, null: false
+      t.timestamps
+    end
+  end
+end
+```
+Then create the module and the main file `app/resources/projects/resource.rb`:
+```ruby 
+module Projects
+  class Resource < ApplicationResource
+  end
+end
+```
+
+Last step is to initialize your resource in `config/initializers/croods.rb`:
+```ruby
+Croods.initialize_for(:users, :comments)
+```
+
+### Skip actions
+Croods creates five basic endpoints for your resource. If you don't want one, you need to skip it's action:
+```ruby
+module Projects
+  class Resource < ApplicationResource
+    skip_actions :index, :create, :update, :show, :destroy
+  end
+end
+```
+### Skip attributes
+By default, every single attribute in your table is exposed is your endpoints. If you don't want this, let croods know:
+```ruby
+module Projects
+  class Resource < ApplicationResource
+    skip_attributes :created_at, :updated_at
+  end
+end
+```
 
 ### Authentication
 Croods uses [devise_token_auth](https://github.com/lynndylanhurley/devise_token_auth) under the hood.
