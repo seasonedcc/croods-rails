@@ -35,7 +35,7 @@ end
 
 Last step is to initialize your resource in `config/initializers/croods.rb`:
 ```ruby
-Croods.initialize_for(:users, :comments)
+Croods.initialize_for(:users, :projects)
 ```
 
 ### Skip actions
