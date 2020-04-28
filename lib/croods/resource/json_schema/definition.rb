@@ -4,7 +4,12 @@ module Croods
   module Resource
     module JsonSchema
       module Definition
-        TYPES = { datetime: 'string', text: 'string', json: 'object' }.freeze
+        TYPES = {
+          datetime: 'string',
+          text: 'string',
+          json: 'object',
+          float: 'number'
+        }.freeze
 
         class << self
           def schema(attribute)
