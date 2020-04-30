@@ -48,7 +48,7 @@ module Projects
 end
 ```
 ### Skip attributes
-By default, every single attribute in your table is exposed is your endpoints. If you don't want this, let croods know:
+By default, every single attribute in your table is exposed in your endpoints. If you don't want this, let croods know:
 ```ruby
 module Projects
   class Resource < ApplicationResource
@@ -57,10 +57,34 @@ module Projects
 end
 ```
 
+### Extend model
+Croods creates a model for your resource. It looks at your database and automatically infers your model's `belongs_to` associations. But if you need to add code to your model just use `extend_model`.
+```ruby
+module Projects
+  class Resource < ApplicationResource
+    extend_model  do
+      before_create :do_somethig
+    end
+  end
+end
+```
+
+Protip: you can create a Model module and `extend_model { include Projects::Model }`.
+```ruby
+module Projects
+  module Model
+    extend ActiveSupport::Concern
+
+    included do
+      before_create :do_something
+    end
+  end
+end
+```
 ### Authentication
 Croods uses [devise_token_auth](https://github.com/lynndylanhurley/devise_token_auth) under the hood.
 To customize which devise modules are loaded, you can pass them as arguments to `use_for_authentication!`
-```
+```ruby
 use_for_authentication!(
   :database_authenticatable,
   :recoverable,
