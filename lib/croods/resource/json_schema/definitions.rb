@@ -4,8 +4,6 @@ module Croods
   module Resource
     module JsonSchema
       module Definitions
-        TYPES = { datetime: 'string', text: 'string', json: 'object' }.freeze
-
         class << self
           def schema(resource)
             attributes(resource).merge(identity: identity(resource))
