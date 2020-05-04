@@ -1,9 +1,22 @@
 [![CircleCI](https://circleci.com/gh/SeasonedSoftware/croods-rails.svg?style=svg)](https://circleci.com/gh/SeasonedSoftware/croods-rails)
 [![Maintainability](https://api.codeclimate.com/v1/badges/5531c26549b427684578/maintainability)](https://codeclimate.com/github/SeasonedSoftware/croods-rails/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/5531c26549b427684578/test_coverage)](https://codeclimate.com/github/SeasonedSoftware/croods-rails/test_coverage)
+![](https://ruby-gem-downloads-badge.herokuapp.com/croods?type=total)
 
 # Croods
 Short description and motivation.
+
+## Installation
+Add this line to your application's Gemfile:
+
+```ruby
+gem 'croods'
+```
+
+And then execute:
+```bash
+$ bundle
+```
 
 ## Usage
 ### Resource
@@ -93,23 +106,6 @@ use_for_authentication!(
   :validatable
 )
 ```
-## Installation
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'croods'
-```
-
-And then execute:
-```bash
-$ bundle
-```
-
-Or install it yourself as:
-```bash
-$ gem install croods
-```
-
 
 ## Contributing
 
