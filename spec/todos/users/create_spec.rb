@@ -39,6 +39,27 @@ describe 'POST /users', type: :request do
     it { expect(response.body).to eq_json(error) }
   end
 
+  context 'with admin param' do
+    let(:params) do
+      { email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar', admin: true }
+    end
+
+    let(:error) do
+      {
+        id: 'bad_request',
+        message: "Invalid request.\n\n#: failed schema " \
+          '#/definitions/user/links/1/schema: "admin" is not a permitted key.'
+      }
+    end
+
+    before do
+      post '/users', params: params.to_json
+    end
+
+    it { is_expected.to have_http_status(:bad_request) }
+    it { expect(response.body).to eq_json(error) }
+  end
+
   context 'with id param' do
     let(:params) do
       { email: 'foo@bar.com', name: 'Foo Bar', password: 'foobar', id: 123 }
