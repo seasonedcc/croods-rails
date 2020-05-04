@@ -6,6 +6,7 @@ module Croods
       module Definition
         TYPES = {
           datetime: 'string',
+          date: 'string',
           text: 'string',
           json: 'object',
           float: 'number'
@@ -17,7 +18,8 @@ module Croods
           end
 
           def format(attribute)
-            return {} unless attribute.type == :datetime
+            is_date = attribute.type == :datetime || attribute.type == :date
+            return {} unless is_date
 
             { format: 'date-time' }
           end
