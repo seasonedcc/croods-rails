@@ -24,6 +24,7 @@ module Croods
 
         request do
           add_attribute :password, :string, null: false
+          skip_attribute :admin
         end
       end
 
