@@ -18,10 +18,14 @@ module Croods
           end
 
           def format(attribute)
-            is_date = attribute.type == :datetime || attribute.type == :date
-            return {} unless is_date
-
-            { format: 'date-time' }
+            case attribute.type
+            when :datetime
+              { format: 'date-time' }
+            when :date
+              { format: 'date' }
+            else
+              {}
+            end
           end
 
           def types(attribute)
