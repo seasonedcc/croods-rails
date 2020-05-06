@@ -37,16 +37,14 @@ module Croods
 
         associations = scope.reflect_on_all_associations(:belongs_to)
 
-        return path if associations.empty?
-
         associations.each do |association|
           model = association.class_name.constantize
           expanded_path = path + [association]
           association_path = reflection_path(model, target, expanded_path)
-          return association_path if association_path != path
+          return association_path unless association_path.empty?
         end
 
-        path
+        []
       end
 
       def joins(path)
