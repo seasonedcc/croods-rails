@@ -30,7 +30,7 @@ module Croods
           end
 
           def action_module(name)
-            "Croods::Resource::JsonSchema::Links::#{name.to_s.titleize}"
+            "Croods::Resource::JsonSchema::Links::#{name.to_s.camelize}"
               .constantize
           end
         end
