@@ -14,7 +14,7 @@ module Croods
       def tenant_model
         return unless Croods.multi_tenancy?
 
-        Croods.multi_tenancy_by.to_s.titleize.constantize
+        Croods.multi_tenancy_by.to_s.camelize.constantize
       end
 
       def header_tenant

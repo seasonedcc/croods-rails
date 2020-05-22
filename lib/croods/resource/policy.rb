@@ -26,7 +26,7 @@ module Croods
       end
 
       def policy_scope_name(action)
-        "#{model_name}#{action.to_s.titleize}Scope"
+        "#{model_name}#{action.to_s.camelize}Scope"
       end
 
       def create_policy!
