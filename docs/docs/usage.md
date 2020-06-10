@@ -42,7 +42,7 @@ Croods.initialize_for(:users, :projects)
 
 ### Skip actions
 
-Croods creates five basic endpoints for your resource. If you don't want one, you need to skip it's action:
+Croods creates five basic endpoints for your resource. If you don't want one, you need to skip its action:
 
 ```ruby
 module Projects
