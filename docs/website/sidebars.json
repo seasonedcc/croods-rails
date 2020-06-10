@@ -1,5 +1,7 @@
 {
   "docs": {
-    "Getting Started": ["introduction", "installation"]
+    "Getting Started": ["introduction", "installation", "usage"],
+    "API": [],
+    "Authentication": ["authentication"]
   }
 }

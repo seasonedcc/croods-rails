@@ -3,4 +3,4 @@ id: introduction
 title: Introduction
 ---
 
-Croods-rails is a library that...
+Croods-rails is a framework for creating CRUDs in Rails APIs.
