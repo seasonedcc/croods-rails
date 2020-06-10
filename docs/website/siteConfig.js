@@ -18,44 +18,34 @@ const users = [
     infoLink: 'https://www.facebook.com',
     pinned: true,
   },
-];
+]
 
 const siteConfig = {
-  title: 'Test Site', // Title for your website.
-  tagline: 'A website for testing',
-  url: 'https://your-docusaurus-test-site.com', // Your website URL
-  baseUrl: '/', // Base URL for your project */
-  // For github.io type URLs, you would set the url and baseUrl like:
-  //   url: 'https://facebook.github.io',
-  //   baseUrl: '/test-site/',
-
-  // Used for publishing and more
-  projectName: 'test-site',
-  organizationName: 'facebook',
-  // For top-level user or org sites, the organization is still the same.
-  // e.g., for the https://JoelMarcey.github.io site, it would be set like...
-  //   organizationName: 'JoelMarcey'
+  title: 'Croods Rails', // Title for your website.
+  tagline: 'A library for croods on Rails',
+  url: 'https://seasonedsoftware.github.io', // Your website URL
+  baseUrl: '/croods-rails/', // Base URL for your project */
+  projectName: 'croods-rails',
+  organizationName: 'SeasonedSoftware',
 
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
-    {doc: 'doc1', label: 'Docs'},
-    {doc: 'doc4', label: 'API'},
-    {page: 'help', label: 'Help'},
-    {blog: true, label: 'Blog'},
+    { doc: 'introduction', label: 'Introduction' },
+    { doc: 'installation', label: 'Installation' },
   ],
 
   // If you have users set above, you add it here:
   users,
 
   /* path to images for header/footer */
-  headerIcon: 'img/favicon.ico',
-  footerIcon: 'img/favicon.ico',
+  headerIcon: 'img/icon.png',
+  footerIcon: 'img/icon.png',
   favicon: 'img/favicon.ico',
 
   /* Colors for website */
   colors: {
-    primaryColor: '#8c253f',
-    secondaryColor: '#62192c',
+    primaryColor: '#002b3a',
+    secondaryColor: '#F77060',
   },
 
   /* Custom fonts for website */
@@ -73,11 +63,12 @@ const siteConfig = {
   */
 
   // This copyright info is used in /core/Footer.js and blog RSS/Atom feeds.
-  copyright: `Copyright © ${new Date().getFullYear()} Your Name or Your Company Name`,
+  copyright: `Copyright © ${new Date().getFullYear()} Seasoned Software`,
 
   highlight: {
     // Highlight.js theme to use for syntax highlighting in code blocks.
-    theme: 'default',
+    theme: 'atom-one-dark',
+    defaultLang: 'ruby',
   },
 
   // Add custom scripts here that would be placed in <script> tags.
@@ -104,7 +95,7 @@ const siteConfig = {
 
   // You may provide arbitrary config keys to be used as needed by your
   // template. For example, if you need your repo's URL...
-  //   repoUrl: 'https://github.com/facebook/test-site',
-};
+  repoUrl: 'https://github.com/SeasonedSoftware/croods-rails',
+}
 
-module.exports = siteConfig;
+module.exports = siteConfig
