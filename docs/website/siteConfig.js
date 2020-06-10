@@ -22,9 +22,9 @@ const users = [
 
 const siteConfig = {
   title: 'Croods Rails', // Title for your website.
-  tagline: 'A library for croods on Rails',
-  url: 'https://seasonedsoftware.github.io', // Your website URL
-  baseUrl: '/croods-rails/', // Base URL for your project */
+  tagline: 'A framework for creating CRUDs in Rails APIs',
+  url: 'https://croods-rails.netlify.app', // Your website URL
+  baseUrl: '/', // Base URL for your project */
   projectName: 'croods-rails',
   organizationName: 'SeasonedSoftware',
 
