@@ -29,7 +29,7 @@ module Croods
           .merge(
             params
               .require(resource.resource_name)
-              .permit(resource.request_attributes.keys)
+              .permit!
           )
       end
 

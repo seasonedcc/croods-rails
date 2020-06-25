@@ -15,7 +15,15 @@ module Croods
 
         class << self
           def schema(attribute)
-            { type: types(attribute) }.merge(format(attribute))
+            { type: types(attribute) }
+              .merge(format(attribute))
+              .merge(items(attribute))
+          end
+
+          def items(attribute)
+            return {} unless %i[json jsonb].include?(attribute.type)
+
+            { items: { type: %w[string number object] } }
           end
 
           def format(attribute)

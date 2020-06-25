@@ -7,7 +7,7 @@ describe 'POST /projects', type: :request do
 
   let(:params) { { name: 'Foo Bar' } }
 
-  context 'with valid params' do
+  context 'without files' do
     let(:project) { Project.find_by(name: 'Foo Bar') }
 
     before do
@@ -16,6 +16,49 @@ describe 'POST /projects', type: :request do
 
     it { is_expected.to have_http_status(:created) }
     it { expect(response.body).to eq_json(project) }
+    it { expect(project.files).to eq([]) }
+  end
+
+  context 'with files as an array of objects' do
+    let(:files) { [{ foo: 'bar' }, { bar: 'foo' }] }
+    let(:params) { { name: 'Foo Bar', files: files } }
+    let(:project) { Project.find_by(name: 'Foo Bar') }
+
+    before do
+      post '/projects', params: params.to_json
+    end
+
+    it { is_expected.to have_http_status(:created) }
+    it { expect(response.body).to eq_json(project) }
+    it { expect(project.files).to eq_json(files) }
+  end
+
+  context 'with files as an array of strings' do
+    let(:files) { %w[foo bar] }
+    let(:params) { { name: 'Foo Bar', files: files } }
+    let(:project) { Project.find_by(name: 'Foo Bar') }
+
+    before do
+      post '/projects', params: params.to_json
+    end
+
+    it { is_expected.to have_http_status(:created) }
+    it { expect(response.body).to eq_json(project) }
+    it { expect(project.files).to eq_json(files) }
+  end
+
+  context 'with files as an array of numbers' do
+    let(:files) { [1, 2, 3] }
+    let(:params) { { name: 'Foo Bar', files: files } }
+    let(:project) { Project.find_by(name: 'Foo Bar') }
+
+    before do
+      post '/projects', params: params.to_json
+    end
+
+    it { is_expected.to have_http_status(:created) }
+    it { expect(response.body).to eq_json(project) }
+    it { expect(project.files).to eq_json(files) }
   end
 
   context 'with invalid param' do
