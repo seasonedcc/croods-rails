@@ -5,11 +5,12 @@ module Croods
     module JsonSchema
       module Definition
         TYPES = {
-          datetime: 'string',
-          date: 'string',
-          text: 'string',
-          json: 'object',
-          float: 'number'
+          datetime: ['string'],
+          date: ['string'],
+          text: ['string'],
+          json: %w[object array],
+          jsonb: %w[object array],
+          float: ['number']
         }.freeze
 
         class << self
@@ -30,13 +31,18 @@ module Croods
 
           def types(attribute)
             types = []
-            types << type(attribute.type)
-            types << 'null' if attribute.null
+            converted_types(attribute.type).each do |converted_type|
+              types << converted_type
+            end
+            null = (
+              attribute.null || attribute.default || attribute.default_function
+            )
+            types << 'null' if null
             types
           end
 
-          def type(type)
-            TYPES[type] || type.to_s
+          def converted_types(type)
+            TYPES[type] || [type.to_s]
           end
         end
       end
