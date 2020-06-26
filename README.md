@@ -130,15 +130,13 @@ use_for_authentication!(
 ## Contributing
 
 You can manually check your changes in the dummy Rails app under `/todos`.
+Use it to run integration tests since it doesn't have an UI.
 
-To set it up:
+- Clone the repository
+- Install bundler `gem install bundler`
+- Install gems `bin/bundle`
 
-```
-cd todos/
-bin/setup
-```
-
-To run specs use:
+To run both Croods-rails' and the example's specs use:
 `bin/rspec`
 
 ## License
