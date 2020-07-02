@@ -129,8 +129,21 @@ end
 module Projects
   class Resource < ApplicationResource
     response do
-      skip_attributes :my_secret_attribute
+      skip_attribute :my_secret_attribute
       # Will not add :my_secret_attribute when rendering project
+    end
+  end
+end
+```
+
+#### Add attributes only for responses
+
+```ruby
+module Projects
+  class Resource < ApplicationResource
+    response do
+      add_attribute :some_derived_attribute
+      # Will add :some_derived_attribute when rendering project
     end
   end
 end
@@ -177,3 +190,57 @@ module Projects
   end
 end
 ```
+
+## Other options
+
+#### Using a custom resource identifier
+
+Croods assumes the resource identifier will be `id`. If you want to use some other column instead, declare its `identifier`.
+
+```ruby
+module Projects
+  class Resource < ApplicationResource
+    identifier :slug
+  end
+end
+```
+
+#### Filtering
+
+By default, the `index` actions returns all records for that resource. You can filter it with `filter_by`.
+
+```ruby
+module Projects
+  class Resource < ApplicationResource
+    filter_by :client_id
+  end
+end
+```
+
+The `index` endpoint becomes: `GET /projects?client_id=<id>`
+
+Now Croods will require the param `client_id` for the that action and return a list of projects with that client_id.
+
+#### Sort the resource list
+
+Use `sort_by` to define how the resource list will be sorted on the `index` action.
+
+```ruby
+module Projects
+  class Resource < ApplicationResource
+    sort_by created_at: :desc
+  end
+end
+```
+
+#### public_action
+
+Documentation WIP
+
+#### use_service, use_services
+
+Documentation WIP
+
+#### Creating mailers
+
+Documentation WIP
