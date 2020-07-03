@@ -46,7 +46,7 @@ describe 'PUT /notes/:id', type: :request do
     let(:note) do
       list.notes.create!(text: 'foo')
     end
-  
+
     before do
       put "/notes/#{note.id}", params: { text: 'Bar Foo' }.to_json
     end
@@ -68,7 +68,7 @@ describe 'PUT /notes/:id', type: :request do
     let(:note) do
       list.notes.create!(text: 'foo')
     end
-  
+
     before do
       put "/notes/#{note.id}", params: { assignment_id: assignment.id }.to_json
     end

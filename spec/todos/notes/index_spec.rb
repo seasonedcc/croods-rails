@@ -28,7 +28,7 @@ describe 'GET /notes', type: :request do
   let(:notes) do
     list.notes.order(:created_at)
   end
-  
+
   context 'with valid request' do
     before do
       get "/notes?list_id=#{list.id}"

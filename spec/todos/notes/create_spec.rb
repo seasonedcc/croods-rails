@@ -24,7 +24,7 @@ describe 'POST /notes', type: :request do
   end
 
   let(:note) { Note.find_by(text: 'Foo Bar') }
-  
+
   context 'without the optional association' do
     before do
       post '/notes', params: params.to_json
