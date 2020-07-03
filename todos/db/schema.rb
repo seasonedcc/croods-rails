@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_25_150646) do
+ActiveRecord::Schema.define(version: 2020_06_26_135719) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -82,6 +82,14 @@ ActiveRecord::Schema.define(version: 2020_06_25_150646) do
     t.bigint   "user_id",    :null=>false, :foreign_key=>{:references=>"users", :name=>"fk_assignments_user_id", :on_update=>:no_action, :on_delete=>:no_action}, :index=>{:name=>"fk__assignments_user_id"}
     t.datetime "created_at", :null=>false
     t.datetime "updated_at", :null=>false
+  end
+
+  create_table "notes", force: :cascade do |t|
+    t.bigint   "assignment_id", :foreign_key=>{:references=>"assignments", :name=>"fk_notes_assignment_id", :on_update=>:no_action, :on_delete=>:no_action}, :index=>{:name=>"fk__notes_assignment_id"}
+    t.bigint   "list_id",       :null=>false, :foreign_key=>{:references=>"lists", :name=>"fk_notes_list_id", :on_update=>:no_action, :on_delete=>:no_action}, :index=>{:name=>"fk__notes_list_id"}
+    t.text     "text",          :null=>false
+    t.datetime "created_at",    :null=>false
+    t.datetime "updated_at",    :null=>false
   end
 
 end

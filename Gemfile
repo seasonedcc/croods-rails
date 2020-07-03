@@ -14,4 +14,6 @@ gemspec
 # your gem to rubygems.org.
 
 # To use a debugger
-# gem 'byebug', group: [:development, :test]
+gem 'awesome_print', group: %i[development test]
+gem 'byebug', group: %i[development test]
+gem 'shoulda-matchers', group: :test

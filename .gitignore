@@ -5,3 +5,4 @@ todos/log/*.log
 todos/tmp/
 .gems/
 coverage/
+.byebug_history

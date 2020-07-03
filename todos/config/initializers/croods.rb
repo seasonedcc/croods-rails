@@ -7,6 +7,7 @@ Croods.initialize_for(
   :lists,
   :tasks,
   :assignments,
+  :notes,
   multi_tenancy_by: :organization
 )
 
