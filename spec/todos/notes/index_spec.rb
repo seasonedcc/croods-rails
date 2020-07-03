@@ -28,8 +28,17 @@ describe 'GET /notes', type: :request do
   let(:notes) do
     list.notes.order(:created_at)
   end
-
+  
   context 'with valid request' do
+    before do
+      get "/notes?list_id=#{list.id}"
+    end
+
+    it { is_expected.to have_http_status(:ok) }
+    it { expect(response.body).to eq_json(notes) }
+  end
+
+  context 'without the optional association' do
     before do
       note.update!(assignment: nil)
 
