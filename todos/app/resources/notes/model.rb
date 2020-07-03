@@ -6,8 +6,6 @@ module Notes
 
     included do
       belongs_to :assignment, optional: true
-
-      #schema_validations auto_create: false
     end
   end
 end
