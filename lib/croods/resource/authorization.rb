@@ -8,10 +8,23 @@ module Croods
 
         on = [on] if on&.is_a?(Symbol)
 
-        actions.each do |action|
-          next if on && !on.include?(action.name)
+        authorization_roles << { roles: roles, on: on }
+      end
 
-          action.roles = roles
+      def authorization_roles
+        @authorization_roles ||= []
+      end
+
+      def apply_authorization_roles!
+        authorization_roles.each do |authorization|
+          (actions + additional_actions).each do |action|
+            on = authorization[:on]
+            roles = authorization[:roles]
+
+            next if on && !on.include?(action.name)
+
+            action.roles = roles
+          end
         end
       end
 

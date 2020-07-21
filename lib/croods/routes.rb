@@ -10,6 +10,7 @@ module ActionDispatch
           resource.create_model!
           resource.create_policy!
           resource.create_controller!
+          resource.apply_authorization_roles!
           create_resource_routes!(resource)
         end
 
