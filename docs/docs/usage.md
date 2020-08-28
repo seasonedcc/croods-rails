@@ -53,6 +53,13 @@ With this, Croods will generate you these default routes and actions:
 
 That's it! You already have a working resource with all CRUD actions available, plus embedded authorization rules.
 
+You can check what resources you have declared using the console:
+
+```ruby
+> Croods.resources
+=> [Projects::Resource, Users::Resource]
+```
+
 By default, every single attribute in your table is exposed in your endpoints, and all attributes are rendered when rendering the resource as json. Usually you'll need to customize them.
 
 ## Customizing actions and attributes
