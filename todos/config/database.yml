@@ -24,8 +24,8 @@ default: &default
 development:
   <<: *default
   host: <%= ENV.fetch("POSTGRES_HOST") { nil } %>
-  username: <%= ENV.fetch("POSTGRES_USER") { "postgres" } %>
-  password: <%= ENV.fetch("POSTGRES_PASSWORD") { "postgres" } %>
+  username: <%= ENV.fetch("POSTGRES_USER") { nil } %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD") { nil } %>
   database: todos_development
 
 

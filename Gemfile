@@ -17,3 +17,4 @@ gemspec
 gem 'awesome_print', group: %i[development test]
 gem 'byebug', group: %i[development test]
 gem 'shoulda-matchers', group: :test
+gem 'dotenv-rails', group: %i[development test]
