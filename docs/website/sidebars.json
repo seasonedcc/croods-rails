@@ -2,6 +2,11 @@
   "docs": {
     "Getting Started": ["introduction", "installation", "usage"],
     "API": [],
-    "Core features": ["authentication", "authorization", "multiTenancy"]
+    "Core features": [
+      "authentication",
+      "authorization",
+      "requestResponseValidation",
+      "multiTenancy"
+    ]
   }
 }
