@@ -3,9 +3,28 @@ id: usage
 title: Usage
 ---
 
-# Resource
+# Resources
 
-A **resource** is a generic abstraction for any object your app needs to represent. Instead of `app/models/` and `app/controllers/`, with croods we have `app/resources/`.
+A **resource** is a generic abstraction for any entity your app needs to represent; anything you would have a database table for.
+
+Everything in Croods-rails is organized around resources, even the file structure.
+
+When you start your server, Croods-rails uses your resources as recipes to create routes, models, controllers, actions, authentication, authorization and multi-tenancy at runtime.
+
+## File structure
+
+In a traditional Rails application, if you want to know the behavior of an entity, you need to navigate between many folders and files:
+
+- `config/routes.rb`
+- `models/your_model.rb`
+- `controllers/your_controller.rb`
+- ...and so on.
+
+That file structure has nothing to do with the behavior of the application. It's just a representation of the framework's interface. As the app grows, each of these folders gets bigger, and finding what you want becomes harder.
+
+Croods-rails changes that. Its architecture is based on the behavior of the API and not on the classic Rails framework structure. It enforces cohesion and incentivizes decoupling. Instead of `app/models/`, `app/controllers/`, etc., with croods we have `app/resources/`.
+
+Each of your resources will have its own folder inside it and everything related to each resource will be in a single place, instead of scattered over your app. This way, you have a better **modularization**.
 
 ## Creating a resource
 
@@ -40,7 +59,7 @@ The last step is to initialize your resource in `config/initializers/croods.rb`:
 Croods.initialize_for(:users, :projects)
 ```
 
-With this, Croods will generate you these default routes and actions:
+With this, Croods will generate these default routes and actions:
 
 | Verb   | URI Pattern             | Controller#Action |
 | ------ | ----------------------- | ----------------- |
@@ -51,7 +70,7 @@ With this, Croods will generate you these default routes and actions:
 | PUT    | /projects/:id(.:format) | projects#update   |
 | DELETE | /projects/:id(.:format) | projects#destroy  |
 
-That's it! You already have a working resource with all CRUD actions available, plus embedded authorization rules.
+That's it! You already have a working resource with all CRUD actions available. By default, all of these endpoinds will require users to be authenticated and authorized.
 
 You can check what resources you have declared using the console:
 
@@ -60,11 +79,26 @@ You can check what resources you have declared using the console:
 => [Projects::Resource, Users::Resource]
 ```
 
-By default, every single attribute in your table is exposed in your endpoints, and all attributes are rendered when rendering the resource as json. Usually you'll need to customize them.
+By default, every single attribute in your table is exposed in your endpoints, and all attributes are rendered when rendering the resource as json.
+
+In the above example, the `create` endpoint would allow the parameters `name`, `created_at` and `updated_at` (`id` is filtered by default.) The `update` endpoints would also allow all these parameters to be changed.
+
+The `index` and `show` endpoints would render this JSON:
+
+```ruby
+{
+  id: id,
+  name: name,
+  created_at: created_at,
+  updated_at: updated_at
+}
+```
+
+Usually you'll need to customize them.
 
 ## Customizing actions and attributes
 
-Croods gives you a lot of features and expects you to remove those you don't want to use.
+Croods gives you a lot of features out of the box and expects you to remove those you don't want to use.
 
 ### Skip actions
 
@@ -145,6 +179,8 @@ end
 
 #### Add attributes only for responses
 
+This is a simple way to render any method that your model has that doesn't correspond to a field in the database.
+
 ```ruby
 module Projects
   class Resource < ApplicationResource
@@ -158,7 +194,7 @@ end
 
 ### Extend model
 
-Croods creates a model for your resource. It looks at your database and automatically infers your model's `belongs_to` associations. But if you need to add code to your model just use `extend_model`.
+Croods creates a model for your resource. It looks at your database and automatically infers your model's `belongs_to` associations. But if you need to add code to your model, use `extend_model`.
 
 `resources/projects/resource.rb`
 
@@ -172,7 +208,11 @@ module Projects
 end
 ```
 
-Protip: you can create a Model module and `extend_model { include Projects::Model }`.
+There's a simple pattern where you use modules to separate those into files:
+
+#### Step 1: Create a `model` module
+
+Note we're creating it inside the resources/projects folder for better modularization: everything related to the resource `projects` is in the same place.
 
 `resources/projects/model.rb`
 
@@ -187,6 +227,8 @@ module Projects
   end
 end
 ```
+
+#### Step 2: extend that module in your `resource` file
 
 `resources/projects/resource.rb`
 
@@ -240,9 +282,19 @@ module Projects
 end
 ```
 
-#### public_action
+#### Public actions
 
-Documentation WIP
+Public actions do not perform authentication nor authorization. In other words, they are available for anyone.
+
+```ruby
+module Projects
+  class Resource < ApplicationResource
+    public_action :index
+  end
+end
+```
+
+In this example, `GET /projects` can be accessed by anyone. All other routes for this resource will still be authenticated and authorized.
 
 #### use_service, use_services
 
