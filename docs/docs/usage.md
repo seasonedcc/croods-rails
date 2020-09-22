@@ -282,20 +282,6 @@ module Projects
 end
 ```
 
-#### Public actions
-
-Public actions do not perform authentication nor authorization. In other words, they are available for anyone.
-
-```ruby
-module Projects
-  class Resource < ApplicationResource
-    public_action :index
-  end
-end
-```
-
-In this example, `GET /projects` can be accessed by anyone. All other routes for this resource will still be authenticated and authorized.
-
 #### use_service, use_services
 
 Documentation WIP
