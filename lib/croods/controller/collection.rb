@@ -9,6 +9,7 @@ module Croods
         resource
           .apply_filters(policy_scope(model), params)
           .order(resource.sort_by)
+          .page(params[:page])
       end
     end
   end

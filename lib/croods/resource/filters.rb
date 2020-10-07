@@ -15,6 +15,8 @@ module Croods
 
       def apply_filters(scope, params)
         filters.each do |attribute|
+          next if attribute.name == 'page'
+
           unless model.has_attribute?(attribute.name)
             attribute.name = "#{attribute.name}_id"
           end

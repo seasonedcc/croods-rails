@@ -23,7 +23,9 @@ module Croods
               filters = {}
 
               resource.filters.each do |attribute|
-                unless resource.model.has_attribute?(attribute.name)
+                model = resource.model
+
+                unless model.has_attribute?(attribute.name) || attribute.name == 'page'
                   attribute.name = "#{attribute.name}_id"
                 end
 
