@@ -6,10 +6,13 @@ module Croods
       protected
 
       def collection
-        resource
+        list = resource
           .apply_filters(policy_scope(model), params)
           .order(resource.sort_by)
-          .page(params[:page])
+
+        return list unless params[:page].present?
+
+        list.page(params[:page])
       end
     end
   end

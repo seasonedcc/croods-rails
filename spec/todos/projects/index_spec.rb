@@ -98,6 +98,17 @@ describe 'GET /projects', type: :request do
       current_user.update! admin: false, supervisor: false
     end
 
+    context 'when page is unspecified' do
+      before do
+        get '/projects'
+      end
+
+      it { is_expected.to have_http_status(:ok) }
+      it { expect(JSON.parse(response.body).length).to eq(30) }
+      it { expect(response.headers['Total']).to be nil }
+      it { expect(response.headers['Per-Page']).to be nil }
+    end
+
     context 'when first page' do
       before do
         get '/projects?page=1'

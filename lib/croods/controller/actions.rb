@@ -12,7 +12,7 @@ module Croods
               collection
             end
 
-            render json: paginate(json)
+            render json: params[:page].present? ? paginate(json) : json
           end
         end
 
