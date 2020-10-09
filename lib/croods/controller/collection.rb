@@ -12,7 +12,7 @@ module Croods
 
         return list unless params[:page].present?
 
-        list.page(params[:page])
+        paginate(list.page(params[:page]))
       end
     end
   end
