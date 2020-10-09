@@ -24,8 +24,9 @@ module Croods
 
               resource.filters.each do |attribute|
                 model = resource.model
+                defaults = resource.default_filters_names
 
-                unless model.has_attribute?(attribute.name) || attribute.name == 'page'
+                unless model.has_attribute?(attribute.name) || defaults.include?(attribute.name)
                   attribute.name = "#{attribute.name}_id"
                 end
 

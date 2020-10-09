@@ -130,6 +130,17 @@ describe 'GET /projects', type: :request do
       it { expect(response.headers['Total']).to eq('30') }
       it { expect(response.headers['Per-Page']).to eq('25') }
     end
+
+    context 'with custom per_page' do
+      before do
+        get '/projects?page=1&per_page=3'
+      end
+
+      it { is_expected.to have_http_status(:ok) }
+      it { expect(JSON.parse(response.body).length).to eq(3) }
+      it { expect(response.headers['Total']).to eq('30') }
+      it { expect(response.headers['Per-Page']).to eq('3') }
+    end
   end
 
   private
