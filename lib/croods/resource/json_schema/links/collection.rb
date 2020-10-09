@@ -19,14 +19,16 @@ module Croods
               }
             end
 
+            def raw_attribute(resource, attribute)
+              resource.model.has_attribute?(attribute.name) ||
+                resource.default_filters_names.include?(attribute.name)
+            end
+
             def filters(resource)
               filters = {}
 
               resource.filters.each do |attribute|
-                model = resource.model
-                defaults = resource.default_filters_names
-
-                unless model.has_attribute?(attribute.name) || defaults.include?(attribute.name)
+                unless raw_attribute resource, attribute
                   attribute.name = "#{attribute.name}_id"
                 end
 

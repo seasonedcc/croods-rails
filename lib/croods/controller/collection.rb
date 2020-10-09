@@ -5,15 +5,17 @@ module Croods
     module Collection
       protected
 
+      # rubocop:disable Metrics/AbcSize
       def collection
         list = resource
           .apply_filters(policy_scope(model), params)
           .order(resource.sort_by)
 
-        return list unless params[:page].present?
+        return paginate(list.page(params[:page])) if params[:page].present?
 
-        paginate(list.page(params[:page]))
+        list
       end
+      # rubocop:enable Metrics/AbcSize
     end
   end
 end

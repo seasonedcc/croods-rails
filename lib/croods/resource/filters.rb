@@ -21,7 +21,7 @@ module Croods
       end
 
       def filters
-        @filters ||= default_filters
+        @filters ||= [] + default_filters
       end
 
       def apply_filters(scope, params)
