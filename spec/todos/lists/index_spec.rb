@@ -127,6 +127,7 @@ describe 'GET /lists', type: :request do
       end
 
       it { is_expected.to have_http_status(:ok) }
+
       it {
         expect(response.body).to eq_json(
           [third_list, list, one_user_list]
