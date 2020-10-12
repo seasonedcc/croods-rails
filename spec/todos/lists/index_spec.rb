@@ -113,20 +113,23 @@ describe 'GET /lists', type: :request do
     end
 
     context 'when sorting by project name ascending' do
-      let(:one_user_second_list) do
-        one_user_project.lists.create! name: 'Second list', total_tasks: 7
+      let(:third_project) do
+        current_user.projects.create! name: 'A third project'
+      end
+
+      let(:third_list) do
+        third_project.lists.create! name: 'Third list'
       end
 
       before do
-        one_user_second_list
+        third_list
         get '/lists?order_by=project_name&order=asc'
       end
 
       it { is_expected.to have_http_status(:ok) }
-
       it {
         expect(response.body).to eq_json(
-          [list, one_user_second_list, one_user_list]
+          [third_list, list, one_user_list]
         )
       }
     end
