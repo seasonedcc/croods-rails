@@ -5,10 +5,22 @@ module Croods
     module Collection
       protected
 
+      def page_param
+        params[resource.page_attribute_name]
+      end
+
+      def paginate_collection(list)
+        paginate(list.send(resource.page_method_name, page_param))
+      end
+
       def collection
-        resource
+        list = resource
           .apply_filters(policy_scope(model), params)
           .order(resource.sort_by)
+
+        list = paginate_collection(list) if page_param.present?
+
+        list
       end
     end
   end

@@ -21,8 +21,10 @@ Gem::Specification.new do |spec|
     '{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md'
   ]
 
+  spec.add_dependency 'api-pagination'
   spec.add_dependency 'committee', '3.3.0'
   spec.add_dependency 'devise_token_auth', '1.1.3'
+  spec.add_dependency 'kaminari'
   spec.add_dependency 'pundit', '2.1.0'
   spec.add_dependency 'rails', '5.2.4.3'
   spec.add_dependency 'schema_associations', '1.2.7'

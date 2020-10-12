@@ -22,11 +22,11 @@ describe 'GET /projects', type: :request do
   end
 
   let(:another_user_project) do
-    another_user.projects.create! name: 'Foo'
+    another_user.projects.create! name: 'Bar'
   end
 
   let(:project) do
-    current_user.projects.create! name: 'Foo'
+    current_user.projects.create! name: 'Baz'
   end
 
   before do
@@ -90,5 +90,75 @@ describe 'GET /projects', type: :request do
 
     it { is_expected.to have_http_status(:ok) }
     it { expect(response.body).to eq_json([project]) }
+  end
+
+  context 'with pagination' do
+    before do
+      create_user_projects
+      current_user.update! admin: false, supervisor: false
+    end
+
+    context 'when page is unspecified' do
+      before do
+        get '/projects'
+      end
+
+      it { is_expected.to have_http_status(:ok) }
+      it { expect(JSON.parse(response.body).length).to eq(30) }
+      it { expect(response.headers['Total']).to be nil }
+      it { expect(response.headers['Per-Page']).to be nil }
+    end
+
+    context 'when first page' do
+      before do
+        get '/projects?page=1'
+      end
+
+      it { is_expected.to have_http_status(:ok) }
+      it { expect(JSON.parse(response.body).length).to eq(25) }
+      it { expect(response.headers['Total']).to eq('30') }
+      it { expect(response.headers['Per-Page']).to eq('25') }
+    end
+
+    context 'when second page' do
+      before do
+        get '/projects?page=2'
+      end
+
+      it { is_expected.to have_http_status(:ok) }
+      it { expect(JSON.parse(response.body).length).to eq(5) }
+      it { expect(response.headers['Total']).to eq('30') }
+      it { expect(response.headers['Per-Page']).to eq('25') }
+    end
+
+    context 'with custom per_page' do
+      before do
+        get '/projects?page=1&per_page=10'
+      end
+
+      it { is_expected.to have_http_status(:ok) }
+      it { expect(JSON.parse(response.body).length).to eq(10) }
+      it { expect(response.headers['Total']).to eq('30') }
+      it { expect(response.headers['Per-Page']).to eq('10') }
+    end
+
+    context 'with page out of range' do
+      before do
+        get '/projects?page=5'
+      end
+
+      it { is_expected.to have_http_status(:ok) }
+      it { expect(JSON.parse(response.body).length).to eq(0) }
+      it { expect(response.headers['Total']).to eq('30') }
+      it { expect(response.headers['Per-Page']).to eq('25') }
+    end
+  end
+
+  private
+
+  def create_user_projects
+    29.times do
+      current_user.projects.create! name: 'Foo'
+    end
   end
 end

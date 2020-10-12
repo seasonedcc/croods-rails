@@ -33,6 +33,16 @@ module Croods
               filters
             end
 
+            def properties(resource)
+              properties = {}
+
+              resource.pagination_params.each do |attribute|
+                properties[attribute.name] = definition(attribute)
+              end
+
+              properties.merge(filters(resource))
+            end
+
             def definition(attribute)
               definition = Definition.schema(attribute)
 
@@ -42,13 +52,16 @@ module Croods
             end
 
             def required(resource)
-              resource.filters.reject(&:null).map(&:name)
+              collection_properties = resource.filters +
+                                      resource.pagination_params
+
+              collection_properties.reject(&:null).map(&:name)
             end
 
             def schema(resource)
               {
                 additionalProperties: false,
-                properties: filters(resource),
+                properties: properties(resource),
                 required: required(resource),
                 type: ['object']
               }
