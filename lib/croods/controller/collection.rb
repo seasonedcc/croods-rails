@@ -14,9 +14,13 @@ module Croods
       end
 
       def collection
-        list = resource
-          .apply_filters(policy_scope(model), params)
-          .order(resource.sort_by)
+        list = resource.apply_filters(policy_scope(model), params)
+
+        list = if params[:order_by].present?
+                 list.order(params[:order_by] => params[:order] || 'asc')
+               else
+                 list.order(resource.sort_by)
+               end
 
         list = paginate_collection(list) if page_param.present?
 
