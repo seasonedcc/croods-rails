@@ -141,6 +141,17 @@ describe 'GET /projects', type: :request do
       it { expect(response.headers['Total']).to eq('30') }
       it { expect(response.headers['Per-Page']).to eq('10') }
     end
+
+    context 'with page out of range' do
+      before do
+        get '/projects?page=5'
+      end
+
+      it { is_expected.to have_http_status(:ok) }
+      it { expect(JSON.parse(response.body).length).to eq(0) }
+      it { expect(response.headers['Total']).to eq('30') }
+      it { expect(response.headers['Per-Page']).to eq('25') }
+    end
   end
 
   private
