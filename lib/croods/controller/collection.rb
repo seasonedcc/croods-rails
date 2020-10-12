@@ -11,7 +11,7 @@ module Croods
           .apply_filters(policy_scope(model), params)
           .order(resource.sort_by)
 
-        return paginate(list.page(params[:page])) if params[:page].present?
+        list = paginate(list.page(params[:page])) if params[:page].present?
 
         list
       end

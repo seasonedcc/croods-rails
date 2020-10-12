@@ -19,16 +19,11 @@ module Croods
               }
             end
 
-            def raw_attribute(resource, attribute)
-              resource.model.has_attribute?(attribute.name) ||
-                resource.default_filters_names.include?(attribute.name)
-            end
-
             def filters(resource)
               filters = {}
 
               resource.filters.each do |attribute|
-                unless raw_attribute resource, attribute
+                unless resource.model.has_attribute?(attribute.name)
                   attribute.name = "#{attribute.name}_id"
                 end
 
@@ -36,6 +31,16 @@ module Croods
               end
 
               filters
+            end
+
+            def properties(resource)
+              properties = {}
+
+              resource.pagination.each do |attribute|
+                properties[attribute.name] = definition(attribute)
+              end
+
+              properties.merge(filters(resource))
             end
 
             def definition(attribute)
@@ -47,13 +52,15 @@ module Croods
             end
 
             def required(resource)
-              resource.filters.reject(&:null).map(&:name)
+              collection_properties = resource.filters + resource.pagination
+
+              collection_properties.reject(&:null).map(&:name)
             end
 
             def schema(resource)
               {
                 additionalProperties: false,
-                properties: filters(resource),
+                properties: properties(resource),
                 required: required(resource),
                 type: ['object']
               }

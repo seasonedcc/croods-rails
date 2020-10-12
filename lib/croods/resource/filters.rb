@@ -9,25 +9,12 @@ module Croods
         )
       end
 
-      def default_filters
-        page = Croods::Attribute.new('page', :string, null: true)
-        per_page = Croods::Attribute.new('per_page', :string, null: true)
-
-        @default_filters ||= [page, per_page]
-      end
-
-      def default_filters_names
-        default_filters.map(&:name)
-      end
-
       def filters
-        @filters ||= [] + default_filters
+        @filters ||= []
       end
 
       def apply_filters(scope, params)
         filters.each do |attribute|
-          next if default_filters_names.include?(attribute.name)
-
           unless model.has_attribute?(attribute.name)
             attribute.name = "#{attribute.name}_id"
           end
