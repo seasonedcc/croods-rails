@@ -13,15 +13,17 @@ module Croods
         paginate(list.send(resource.page_method_name, page_param))
       end
 
+      def sort(list)
+        if list.respond_to? resource.sort_by
+          list.public_send(resource.sort_by, params[:order_by], params[:order])
+        else
+          list.order(resource.sort_by)
+        end
+      end
+
       def collection
         list = resource.apply_filters(policy_scope(model), params)
-
-        list = if params[:order_by].present?
-                 list.order(params[:order_by] => params[:order] || 'asc')
-               else
-                 list.order(resource.sort_by)
-               end
-
+        list = sort(list)
         list = paginate_collection(list) if page_param.present?
 
         list
