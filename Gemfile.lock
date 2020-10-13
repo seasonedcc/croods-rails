@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    croods (0.2.10)
+    croods (0.3.0)
       api-pagination
       committee (= 3.3.0)
       devise_token_auth (= 1.1.3)
