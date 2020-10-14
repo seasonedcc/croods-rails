@@ -270,18 +270,6 @@ The `index` endpoint becomes: `GET /projects?client_id=<id>`
 
 Now Croods will require the param `client_id` for the that action and return a list of projects with that client_id.
 
-#### Sort the resource list
-
-Use `sort_by` to define how the resource list will be sorted on the `index` action.
-
-```ruby
-module Projects
-  class Resource < ApplicationResource
-    sort_by created_at: :desc
-  end
-end
-```
-
 #### use_service, use_services
 
 Documentation WIP
