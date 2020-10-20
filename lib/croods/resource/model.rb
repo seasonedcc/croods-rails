@@ -17,15 +17,19 @@ module Croods
         model_name.constantize
       end
 
+      def configure_search
+        resource = model.resource
+
+        model.send(:include, PgSearch::Model)
+        model.send(:pg_search_scope,
+                   resource.search_method_name,
+                   resource.search_options)
+      end
+
       def create_model!
         Object.const_set(model_name, Class.new(Croods::Model))
 
-        resource = model.resource
-
-        if resource.search_method_name.present?
-          model.send(:include, PgSearch::Model)
-          model.send(:pg_search_scope, resource.search_method_name, resource.search_options)
-        end
+        configure_search if model.resource.search_method_name.present?
 
         model_blocks.each do |block|
           model.instance_eval(&block)
