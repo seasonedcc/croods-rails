@@ -4,6 +4,13 @@ module Lists
   class Resource < ApplicationResource
     filter_by :project, optional: true
 
+    search_by :search,
+              against: %i[
+                name status_text
+              ],
+              associated_against: { project: :name },
+              using: { tsearch: { prefix: true } }
+
     sort_by :sorting
 
     authorize :owner, :admin, :supervisor
@@ -13,15 +20,6 @@ module Lists
     end
 
     extend_model do
-      include PgSearch::Model
-
-      pg_search_scope :search,
-                      against: %i[
-                        name status_text
-                      ],
-                      associated_against: { project: :name },
-                      using: { tsearch: { prefix: true } }
-
       def self.sorting(order_by, order)
         sort = parse_sorting_names(order_by) || 'created_at'
         joins(:project).order(sort => order || 'asc')

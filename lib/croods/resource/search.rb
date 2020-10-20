@@ -18,7 +18,16 @@ module Croods
       end
 
       def search_method_name
-        @search_method_name ||= :search
+        @search_method_name
+      end
+
+      def search_options
+        @search_options
+      end
+
+      def search_by(name, options = {})
+        @search_method_name = name
+        @search_options = options
       end
     end
   end
