@@ -136,6 +136,15 @@ describe 'GET /lists', type: :request do
     end
   end
 
+  context 'when searching' do
+    before do
+      get '/lists?query=one'
+    end
+
+    it { is_expected.to have_http_status(:ok) }
+    it { expect(response.body).to eq_json([one_user_list]) }
+  end
+
   context 'with invalid request' do
     let(:error) do
       {

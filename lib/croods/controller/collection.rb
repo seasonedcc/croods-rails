@@ -9,8 +9,16 @@ module Croods
         params[resource.page_attribute_name]
       end
 
+      def search_param
+        params[resource.search_attribute_name]
+      end
+
       def paginate_collection(list)
         paginate(list.send(resource.page_method_name, page_param))
+      end
+
+      def search_collection(list)
+        list.public_send resource.search_method_name, search_param
       end
 
       def sort(list)
@@ -23,6 +31,7 @@ module Croods
 
       def collection
         list = resource.apply_filters(policy_scope(model), params)
+        list = search_collection(list) if search_param.present?
         list = sort(list)
         list = paginate_collection(list) if page_param.present?
 

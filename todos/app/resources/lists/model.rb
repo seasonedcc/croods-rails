@@ -1,18 +1,10 @@
 # frozen_string_literal: true
 
 module Lists
-  class Resource < ApplicationResource
-    filter_by :project, optional: true
+  module Model
+    extend ActiveSupport::Concern
 
-    sort_by :sorting
-
-    authorize :owner, :admin, :supervisor
-
-    request do
-      skip_attributes :total_tasks, :finished_tasks, :progress, :status_text
-    end
-
-    extend_model do
+    included do
       include PgSearch::Model
 
       pg_search_scope :search,

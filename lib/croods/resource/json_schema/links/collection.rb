@@ -36,7 +36,8 @@ module Croods
             def properties(resource)
               properties = {}
 
-              params = resource.pagination_params + resource.order_params
+              params = resource.pagination_params + resource.order_params +
+                       resource.search_params
 
               params.each do |attribute|
                 properties[attribute.name] = definition(attribute)
