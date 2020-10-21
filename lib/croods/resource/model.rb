@@ -18,12 +18,12 @@ module Croods
       end
 
       def configure_search
-        resource = model.resource
+        return unless table_exists?
 
         model.send(:include, PgSearch::Model)
         model.send(:pg_search_scope,
-                   resource.search_method_name,
-                   resource.search_options)
+                   search_method_name,
+                   search_options)
       end
 
       def create_model!

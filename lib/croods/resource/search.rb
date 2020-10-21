@@ -29,6 +29,7 @@ module Croods
 
       def default_search_options
         searchable = []
+
         attributes.each do |key, value|
           searchable << key if value.type.in? %i[string text]
         end
