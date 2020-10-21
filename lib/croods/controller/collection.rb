@@ -20,7 +20,11 @@ module Croods
       def search_collection(list)
         return list unless search_param.present?
 
-        list.public_send resource.search_method_name, search_param
+        if resource.search_block.present?
+          list.instance_exec(search_param, &resource.search_block)
+        else
+          list.public_send resource.search_method_name, search_param
+        end
       end
 
       def sort(list)

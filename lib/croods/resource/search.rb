@@ -30,7 +30,7 @@ module Croods
       def default_search_options
         searchable = []
         attributes.each do |key, value|
-          searchable << key if value.type.in? [:string, :text]
+          searchable << key if value.type.in? %i[string text]
         end
 
         {
@@ -42,6 +42,10 @@ module Croods
         @search_options ||= default_search_options
       end
 
+      def search_block
+        @search_block
+      end
+
       def skip_search?
         @skip_search
       end
@@ -50,9 +54,10 @@ module Croods
         @skip_search ||= true
       end
 
-      def search_by(name, options = {})
+      def search_by(name, options = {}, &block)
         @search_method_name = name
         @search_options = options
+        @search_block = block
       end
     end
   end
