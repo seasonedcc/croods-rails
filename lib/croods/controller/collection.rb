@@ -18,6 +18,8 @@ module Croods
       end
 
       def search_collection(list)
+        return list unless search_param.present?
+
         list.public_send resource.search_method_name, search_param
       end
 
@@ -31,7 +33,7 @@ module Croods
 
       def collection
         list = resource.apply_filters(policy_scope(model), params)
-        list = search_collection(list) if search_param.present?
+        list = search_collection(list) unless resource.skip_search?
         list = sort(list)
         list = paginate_collection(list) if page_param.present?
 

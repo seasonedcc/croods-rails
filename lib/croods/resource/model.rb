@@ -29,7 +29,7 @@ module Croods
       def create_model!
         Object.const_set(model_name, Class.new(Croods::Model))
 
-        configure_search if model.resource.search_method_name.present?
+        configure_search unless model.resource.skip_search?
 
         model_blocks.each do |block|
           model.instance_eval(&block)
