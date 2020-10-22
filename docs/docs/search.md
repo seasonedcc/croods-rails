@@ -24,11 +24,11 @@ Use search_by to configure [pg_search_scope](https://github.com/Casecommons/pg_s
 ```ruby
 module Lists
   class Resource < ApplicationResource
-    search_by :search,
+    search_by :my_search_method, # method created and used by pg_search
               against: %i[
-                name status_text
+                name status_text another_string_or_text_field
               ],
-              associated_against: { project: :name },
+              associated_against: { project: :name }, # See the pg_search docs for options
               using: { tsearch: { prefix: true } }
   end
 end
@@ -41,6 +41,7 @@ You can pass a block to search_by to expand it beyond text fields. For example, 
 ```ruby
 module Projects
   class Resource < ApplicationResource
+    # search_by accepts: symbol, options_hash (both for pg_search) and an optional block
     search_by :search, { against: %i[name] } do |query|
       parse_query_param(query)
     end
