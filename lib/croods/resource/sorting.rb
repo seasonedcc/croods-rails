@@ -19,10 +19,15 @@ module Croods
         @order_params ||= [order_by_attribute, order_attribute]
       end
 
-      def sort_by(attribute = nil)
-        return @sort_by ||= :created_at unless attribute
+      def sort_by_method?
+        sort_by.is_a?(Symbol) && !sort_by.to_s.in?(attribute_names) &&
+          model.respond_to?(sort_by)
+      end
 
-        @sort_by ||= attribute
+      def sort_by(sort = nil)
+        return @sort_by ||= :created_at unless sort
+
+        @sort_by ||= sort
       end
     end
   end

@@ -28,12 +28,10 @@ module Croods
       end
 
       def sort(list)
-        sort_by = resource.sort_by
-
-        if sort_by.is_a?(Symbol) && list.respond_to?(sort_by)
-          list.public_send(sort_by, params[:order_by], params[:order])
+        if resource.sort_by_method?
+          list.public_send(resource.sort_by, params[:order_by], params[:order])
         else
-          list.order(sort_by)
+          list.order(resource.sort_by)
         end
       end
 

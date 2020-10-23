@@ -43,6 +43,10 @@ module Croods
         merged_attributes(self, model.columns_hash)
       end
 
+      def attribute_names
+        attributes.map { |key, _| key }
+      end
+
       def definitions
         attributes
           .merge(request_instance.additional_attributes)
