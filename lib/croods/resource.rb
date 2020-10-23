@@ -14,6 +14,7 @@ require_relative 'resource/authorization'
 require_relative 'resource/filters'
 require_relative 'resource/pagination'
 require_relative 'resource/sorting'
+require_relative 'resource/search'
 require_relative 'resource/services'
 
 module Croods
@@ -35,6 +36,7 @@ module Croods
       include Filters
       include Pagination
       include Sorting
+      include Search
       include Services
     end
   end

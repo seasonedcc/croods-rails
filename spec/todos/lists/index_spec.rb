@@ -136,6 +136,35 @@ describe 'GET /lists', type: :request do
     end
   end
 
+  context 'when searching' do
+    context 'when the query is found on an attribute' do
+      before do
+        get '/lists?query=one'
+      end
+
+      it { is_expected.to have_http_status(:ok) }
+      it { expect(response.body).to eq_json([one_user_list]) }
+    end
+
+    context 'when the query is found on an association' do
+      before do
+        get '/lists?query=project'
+      end
+
+      it { is_expected.to have_http_status(:ok) }
+      it { expect(response.body).to eq_json([one_user_list, list]) }
+    end
+
+    context 'when the query has no matches' do
+      before do
+        get '/lists?query=nowhere'
+      end
+
+      it { is_expected.to have_http_status(:ok) }
+      it { expect(response.body).to eq_json([]) }
+    end
+  end
+
   context 'with invalid request' do
     let(:error) do
       {

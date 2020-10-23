@@ -32,6 +32,14 @@ describe 'GET /organizations', type: :request do
     it { expect(response.body).to eq_json(error) }
   end
 
+  context 'with a query' do
+    before do
+      get '/organizations?query=foo'
+    end
+
+    it { is_expected.to have_http_status(:bad_request) }
+  end
+
   context 'without current user' do
     let(:headers) { { 'access-token' => nil } }
 

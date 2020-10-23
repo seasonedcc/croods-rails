@@ -4,6 +4,13 @@ module Lists
   class Resource < ApplicationResource
     filter_by :project, optional: true
 
+    search_by :search,
+              against: %i[
+                name status_text
+              ],
+              associated_against: { project: :name },
+              using: { tsearch: { prefix: true } }
+
     sort_by :sorting
 
     authorize :owner, :admin, :supervisor

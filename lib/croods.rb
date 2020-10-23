@@ -6,10 +6,13 @@ require 'devise'
 require 'devise_token_auth'
 require 'kaminari'
 require 'api-pagination'
+require 'pg_search'
 require 'pundit'
 require 'schema_associations'
 require 'schema_auto_foreign_keys'
 require 'schema_validations'
+
+load 'pg_search/tasks.rb'
 
 module Croods
   cattr_accessor :namespaces, :json_schema, :multi_tenancy_by

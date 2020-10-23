@@ -6,6 +6,7 @@
       "authentication",
       "authorization",
       "requestResponseValidation",
+      "search",
       "sorting",
       "pagination",
       "multiTenancy"

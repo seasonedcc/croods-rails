@@ -154,6 +154,27 @@ describe 'GET /projects', type: :request do
     end
   end
 
+  context 'when searching' do
+    context 'when query has a name' do
+      before do
+        get '/projects?query=baz'
+      end
+
+      it { is_expected.to have_http_status(:ok) }
+      it { expect(response.body).to eq_json([project]) }
+    end
+
+    context 'when query has a date' do
+      before do
+        project.update! deadline: '2020-10-05'
+        get '/projects?query=10/05/2020'
+      end
+
+      it { is_expected.to have_http_status(:ok) }
+      it { expect(response.body).to eq_json([project]) }
+    end
+  end
+
   private
 
   def create_user_projects
