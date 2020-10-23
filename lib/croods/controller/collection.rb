@@ -27,9 +27,17 @@ module Croods
         end
       end
 
+      def sort_by_method(list)
+        if params[:order_by].present?
+          list.public_send(resource.sort_by, params[:order_by], params[:order])
+        else
+          list.public_send(resource.sort_by)
+        end
+      end
+
       def sort(list)
         if resource.sort_by_method?
-          list.public_send(resource.sort_by, params[:order_by], params[:order])
+          sort_by_method(list)
         else
           list.order(resource.sort_by)
         end

@@ -20,8 +20,8 @@ module Lists
     end
 
     extend_model do
-      def self.sorting(order_by, order)
-        sort = parse_sorting_names(order_by) || 'created_at'
+      def self.sorting(order_by = 'created_at', order = 'asc')
+        sort = parse_sorting_names(order_by)
         joins(:project).order(sort => order || 'asc')
       end
 
