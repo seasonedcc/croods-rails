@@ -6,6 +6,8 @@ module Projects
       parse_query_param(query)
     end
 
+    sort_by :name
+
     add_action :highlighted, on: :collection do
       authorize model
       render json: collection.where(highlighted: true)

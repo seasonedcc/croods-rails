@@ -41,7 +41,7 @@ describe 'GET /projects', type: :request do
     end
 
     it { is_expected.to have_http_status(:ok) }
-    it { expect(response.body).to eq_json([one_user_project, project]) }
+    it { expect(response.body).to eq_json([project, one_user_project]) }
   end
 
   context 'with invalid request' do
