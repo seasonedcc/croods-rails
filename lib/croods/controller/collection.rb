@@ -27,13 +27,27 @@ module Croods
         end
       end
 
+      def order_by
+        params[:order_by].presence
+      end
+
+      def order
+        params[:order].presence
+      end
+
+      # rubocop:disable Metrics/AbcSize
       def sort_by_method(list)
-        if params[:order_by].present?
-          list.public_send(resource.sort_by, params[:order_by], params[:order])
+        if order_by && order
+          list.public_send(resource.sort_by, order_by, order)
+        elsif order_by
+          list.public_send(resource.sort_by, order_by)
+        elsif order
+          list.public_send(resource.sort_by, order)
         else
           list.public_send(resource.sort_by)
         end
       end
+      # rubocop:enable Metrics/AbcSize
 
       def sort(list)
         if resource.sort_by_method?
