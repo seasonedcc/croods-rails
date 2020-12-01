@@ -231,6 +231,17 @@ describe 'PUT /tasks/:id', type: :request do
     it { is_expected.to have_http_status(:ok) }
   end
 
+  context 'when we add an attribute that does not exist in the model' do
+    let(:params) { { foobaz: 'foobar' } }
+
+    before do
+      put "/tasks/#{task.id}", params: params.to_json
+    end
+
+    it { is_expected.to have_http_status(:ok) }
+    # it { expect(response.body).to eq_json(error) }
+  end
+
   context 'when task is from another organization' do
     let(:id) { another_user_task.id }
 

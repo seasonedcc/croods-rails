@@ -7,6 +7,7 @@ module Tasks
 
     request do
       skip_attribute :finished
+      add_attribute :foobaz, :string, null: true
     end
 
     add_action :finish, method: :put do
