@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'kaminari', '1.2.1'
   spec.add_dependency 'pg_search', '2.3.4'
   spec.add_dependency 'pundit', '2.1.0'
-  spec.add_dependency 'rails', '5.2.4.4'
+  spec.add_dependency 'rails', '5.2.5'
   spec.add_dependency 'schema_associations', '1.2.7'
   spec.add_dependency 'schema_auto_foreign_keys', '0.1.3'
   spec.add_dependency 'schema_validations', '2.3.0'
