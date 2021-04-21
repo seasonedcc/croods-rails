@@ -5,6 +5,7 @@ module Tasks
     about :task
 
     def execute
+      params.delete(:foobaz)
       task.update!(params)
 
       task.list.update!(

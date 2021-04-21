@@ -23,7 +23,7 @@ module Croods
         params[resource.identifier]
       end
 
-      def member_params
+      def member_params # rubocop:disable Metrics/AbcSize
         params
           .permit(resource.request_attributes.keys)
           .merge(
@@ -31,6 +31,8 @@ module Croods
               .require(resource.resource_name)
               .permit!
           )
+      rescue StandardError
+        params.permit(resource.request_attributes.keys)
       end
 
       def new_member
