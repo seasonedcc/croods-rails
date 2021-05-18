@@ -30,6 +30,8 @@ require 'timecop'
 Dir[Rails.root.join('..', 'spec', 'support', '**', '*.rb')]
   .sort.each { |f| require f }
 
+Devise.stretches = 1
+Rails.logger.level = 4
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
 begin
