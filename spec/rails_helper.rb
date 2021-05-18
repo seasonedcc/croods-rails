@@ -30,8 +30,19 @@ require 'timecop'
 Dir[Rails.root.join('..', 'spec', 'support', '**', '*.rb')]
   .sort.each { |f| require f }
 
+# 1. Reduce Devise.stretches
+# Explanation: Devise uses bcrypt-ruby by default to encrypt your password. Bcrypt is one of the best choices for such job because, different from other hash libraries like MD5, SHA1, SHA2, it was designed to be slow. So if someone steals your database it will take a long time for them to crack each password in it.
+# That said, it is expected that Devise will also be slow during tests as many tests are generating and comparing passwords. For this reason, a very easy way to improve your test suite performance is to reduce the value in Devise.stretches, which represents the cost taken while generating a password with bcrypt. This will make your passwords less secure, but that is ok as long as it applies only to the test environment.
+# Latest Devise versions already set stretches to one on test environments in your initializer, but if you have an older application, this will yield a nice improvement!
+
+# 2. Increase your log level
+# Explanation: Rails by default logs everything that is happening in your test environment to “log/test.log”. By increasing the logger level, you will be able to reduce the IO during your tests. The only downside of this approach is that, if a test is failing, you won’t have anything logged. In such cases, just comment the configuration option above and run your tests again.
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
+Devise.stretches = 1
+Rails.logger.level = 4
+
+
 begin
   ActiveRecord::Migration.maintain_test_schema!
 rescue ActiveRecord::PendingMigrationError => e
