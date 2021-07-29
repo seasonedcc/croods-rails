@@ -38,7 +38,7 @@ module Croods
         associations = scope.reflect_on_all_associations(:belongs_to)
 
         associations.each do |association|
-          next if association.options[:optional]
+          next if association.options[:optional] || association.polymorphic?
 
           model = association.class_name.constantize
           expanded_path = path + [association]
