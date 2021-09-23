@@ -1,0 +1,130 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  test:
+    name: Run unit tests
+    env:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_HOST: 'localhost'
+
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis
+        ports: ['6379:6379']
+        options: --entrypoint redis-server
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: 'postgres'
+          POSTGRES_DB: postgres
+          POSTGRES_HOST_AUTH_METHOD: 'trust'
+        ports:
+          - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Install dependencies
+        run: |
+          gem install bundler -v '2.1.4'
+          sudo apt update
+          sudo apt install postgresql-client cmake
+          bundle install --jobs=4 --retry=3 --path vendor/bundle
+          sudo npm install -g mjml@4.3.1
+
+      - name: Database setup
+        run: |
+          todos/bin/setup
+
+      - name: Run RSpec
+        run: |
+          bundle exec rspec \
+            --format RspecJunitFormatter \
+            --out /tmp/test-results/rspec.xml \
+
+      - name: Generate Undercover report
+        run: |
+          bundle exec undercover -c origin/master > tmp/undercover.txt || \
+          echo "Running undercover and ignoring exit status ..."
+          bundle exec undercover-checkstyle --compare origin/master > tmp/undercover-checkstyle.xml || \
+          echo "Running undercover-checkstyle and ignoring exit status ..."
+
+      - name: Archive coverage results
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: coverage
+          retention-days: 10
+
+      - name: Archive undercover results
+        uses: actions/upload-artifact@v2
+        with:
+          name: undercover
+          path: tmp/undercover.txt
+          retention-days: 10
+
+      - name: Archive undercover-checkstyle results
+        uses: actions/upload-artifact@v2
+        with:
+          name: undercover-checkstyle
+          path: tmp/undercover-checkstyle.xml
+          retention-days: 10
+
+  run-linter:
+    name: Run linter
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - uses: ruby/setup-ruby@v1
+
+      - name: rubocop
+        uses: reviewdog/action-rubocop@v2
+        with:
+          rubocop_version: gemfile
+          rubocop_extensions: rubocop-rails:gemfile rubocop-rspec:gemfile
+          github_token: ${{ secrets.github_token }}
+
+  report-diff-coverage:
+    name: Report diff coverage
+    needs: test
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: undercover-checkstyle
+
+      - uses: reviewdog/action-setup@v1
+
+      - name: Comment on PR
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cat undercover-checkstyle.xml | \
+          reviewdog -reporter=github-check -name="Diff coverage" -f=checkstyle

@@ -38,3 +38,5 @@ Style/HashTransformKeys:
   Enabled: true
 Style/HashTransformValues:
   Enabled: true
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
