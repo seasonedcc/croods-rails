@@ -60,7 +60,7 @@ jobs:
         run: |
           bundle exec rspec \
             --format RspecJunitFormatter \
-            --out /tmp/rspec.xml \
+            --out /tmp/rspec.xml
 
       - name: Generate Undercover report
         run: |
