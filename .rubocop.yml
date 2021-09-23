@@ -18,8 +18,6 @@ AllCops:
     - 'todos/bin/*'
     - 'todos/node_modules/**/*'
     - 'spec/rails_helper.rb'
-Rails:
-  Enabled: true
 Documentation:
   Enabled: false
 Metrics/BlockLength:
