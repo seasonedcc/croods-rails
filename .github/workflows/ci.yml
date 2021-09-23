@@ -54,11 +54,13 @@ jobs:
         run: |
           todos/bin/setup
 
+      - run: mkdir tmp/
+
       - name: Run RSpec
         run: |
           bundle exec rspec \
             --format RspecJunitFormatter \
-            --out /tmp/test-results/rspec.xml \
+            --out /tmp/rspec.xml \
 
       - name: Generate Undercover report
         run: |
