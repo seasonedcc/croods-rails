@@ -57,13 +57,14 @@ jobs:
       - run: mkdir tmp/
 
       - name: Run rspec experiment
-        run: bundle exec rspec
+        run: bundle exec rspec -f j -o tmp/rspec_results.json -f p
 
-      - name: Run RSpec
-        run: |
-          bundle exec rspec \
-            --format RspecJunitFormatter \
-            --out /tmp/rspec.xml
+      - name: RSpec Report
+        uses: SonicGarden/rspec-report-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          json-path: tmp/rspec_results.json
+        if: always()
 
       - name: Generate Undercover report
         run: |
