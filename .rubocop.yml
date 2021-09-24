@@ -1,6 +1,7 @@
 require: rubocop-rspec
 
 AllCops:
+  NewCops: disable
   DisplayCopNames: true
   Include:
     - '**/*.rb'
@@ -37,4 +38,6 @@ Style/HashTransformKeys:
 Style/HashTransformValues:
   Enabled: true
 RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+RSpec/FilePath:
   Enabled: false
