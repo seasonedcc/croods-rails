@@ -33,12 +33,12 @@ jobs:
       - run:
           name: install dependencies
           command: |
+            sudo apt install cmake
             gem install bundler -v '2.1.4'
             bundle install --jobs=4 --retry=3 --path vendor/bundle
             sudo apt update
             sudo apt install postgresql-client
             sudo npm install -g mjml@4.3.1
-            sudo apt install cmake
       - save_cache:
           paths:
             - ./vendor/bundle
