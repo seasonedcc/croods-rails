@@ -55,8 +55,8 @@ jobs:
 
       - run: mkdir tmp/
 
-      - name: Run rspec experiment
-        run: bundle exec rspec -f j -o tmp/rspec_results.json -f p
+      - name: Run rspec
+        run: bundle exec rspec -f j -o tmp/rspec_results.json
 
       - name: RSpec Report
         uses: SonicGarden/rspec-report-action@v1
