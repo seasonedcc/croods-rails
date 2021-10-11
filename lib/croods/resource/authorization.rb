@@ -6,7 +6,7 @@ module Croods
       def authorize(*roles, on: nil)
         return if roles.empty?
 
-        on = [on] if on&.is_a?(Symbol)
+        on = [on] if on.is_a?(Symbol)
 
         authorization_roles << { roles: roles, on: on }
       end
@@ -31,7 +31,7 @@ module Croods
       def public_actions(*names)
         return unless names
 
-        names = [names] if names&.is_a?(Symbol)
+        names = [names] if names.is_a?(Symbol)
 
         extend_controller do
           skip_before_action :authenticate_user!, only: names

@@ -33,10 +33,10 @@ jobs:
       - run:
           name: install dependencies
           command: |
+            sudo apt update
+            sudo apt install postgresql-client cmake
             gem install bundler -v '2.1.4'
             bundle install --jobs=4 --retry=3 --path vendor/bundle
-            sudo apt update
-            sudo apt install postgresql-client
             sudo npm install -g mjml@4.3.1
       - save_cache:
           paths:
@@ -51,24 +51,17 @@ jobs:
       # Database setup
       - run: todos/bin/setup
 
-      # Setup coverage report
-      - run:
-          name: Setup Code Climate test-reporter
-          command: |
-            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-            chmod +x ./cc-test-reporter
       # run tests!
       - run:
           name: Run tests
           command: |
             mkdir /tmp/test-results
-            ./cc-test-reporter before-build
             bundle exec rspec --format progress \
                             --format RspecJunitFormatter \
                             --out /tmp/test-results/rspec.xml \
                             --format progress
-            ./cc-test-reporter after-build --coverage-input-type simplecov --exit-code $?
-      # collect reports
+
+                            # collect reports
       - store_test_results:
           path: /tmp/test-results
       - store_artifacts:

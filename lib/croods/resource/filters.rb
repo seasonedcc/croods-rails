@@ -15,9 +15,7 @@ module Croods
 
       def apply_filters(scope, params)
         filters.each do |attribute|
-          unless model.has_attribute?(attribute.name)
-            attribute.name = "#{attribute.name}_id"
-          end
+          attribute.name = "#{attribute.name}_id" unless model.has_attribute?(attribute.name)
 
           value = params[attribute.name]
           next unless value

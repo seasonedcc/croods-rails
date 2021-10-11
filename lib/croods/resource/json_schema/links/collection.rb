@@ -23,9 +23,7 @@ module Croods
               filters = {}
 
               resource.filters.each do |attribute|
-                unless resource.model.has_attribute?(attribute.name)
-                  attribute.name = "#{attribute.name}_id"
-                end
+                attribute.name = "#{attribute.name}_id" unless resource.model.has_attribute?(attribute.name)
 
                 filters[attribute.name] = definition(attribute)
               end

@@ -7,6 +7,7 @@ RSpec.shared_context 'with current_user' do
     )
   end
 
+  # rubocop:disable RSpec/LetSetup
   let!(:current_user) do
     current_organization.users.create!(
       email: 'current.user@email.com',
@@ -16,6 +17,7 @@ RSpec.shared_context 'with current_user' do
       supervisor: true
     )
   end
+  # rubocop:enable RSpec/LetSetup
 end
 
 RSpec.configure do |config|
