@@ -13,6 +13,7 @@ jobs:
     env:
       POSTGRES_USER: 'postgres'
       POSTGRES_HOST: 'localhost'
+      RAILS_ENV: test
 
     runs-on: ubuntu-latest
 
@@ -44,10 +45,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          gem install bundler -v '2.1.4'
           sudo apt update
           sudo apt install postgresql-client cmake
-          bundle install --jobs=4 --retry=3 --path vendor/bundle
           sudo npm install -g mjml@4.6.3
 
       - name: Database setup
