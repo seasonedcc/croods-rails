@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
   spec.summary     = 'A framework for creating CRUDs in Rails APIs'
   spec.description = 'A framework for creating CRUDs in Rails APIs'
   spec.license     = 'MIT'
-  spec.required_ruby_version = '>= 2.6.5'
+  spec.required_ruby_version = '>= 2.7.6'
 
   spec.files = Dir[
     '{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md'
