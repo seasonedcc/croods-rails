@@ -1,6 +1,7 @@
 require: rubocop-rspec
 
 AllCops:
+  NewCops: disable
   DisplayCopNames: true
   Include:
     - '**/*.rb'
@@ -17,8 +18,7 @@ AllCops:
     - 'bin/*'
     - 'todos/bin/*'
     - 'todos/node_modules/**/*'
-Rails:
-  Enabled: true
+    - 'spec/rails_helper.rb'
 Documentation:
   Enabled: false
 Metrics/BlockLength:
@@ -37,3 +37,7 @@ Style/HashTransformKeys:
   Enabled: true
 Style/HashTransformValues:
   Enabled: true
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+RSpec/FilePath:
+  Enabled: false

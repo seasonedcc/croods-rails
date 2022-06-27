@@ -16,9 +16,7 @@ module Croods
     end
 
     def initialize(member_or_collection, params, current_user)
-      if self.class.about
-        public_send("#{self.class.about}=", member_or_collection)
-      end
+      public_send("#{self.class.about}=", member_or_collection) if self.class.about
 
       self.member_or_collection = member_or_collection
       self.params = params
